@@ -23,19 +23,21 @@ public class VueController {
     public Msg signin(@RequestBody User user) {
 
         Msg msg = new Msg("", 0, "");
-        if (userRepository.findAll().iterator().next().getUsername().equals(user.getUsername())
-                && userRepository.findAll().iterator().next().getPassword().equals(user.getPassword())) {
-
-            // if (user.getUsername().equals(account) && user.getPassword().equals(pwd)) {
-            msg.setMsg("you are success login!");
-            msg.setCode(1000);
-            msg.setData("");
-        } else {
-            msg.setMsg("login failed!");
-            msg.setCode(500);
-            msg.setData("");
+        for (User us : userRepository.findAll()) {
+            if (us.getUsername().equals(user.getUsername()) && us.getPassword().equals(user.getPassword())) {
+                msg.setMsg("you are success login!");
+                msg.setCode(1000);
+                msg.setData("");
+            } else if (user.getUsername().equals(account) && user.getPassword().equals(pwd)) {
+                msg.setMsg("you are success login with inner account!");
+                msg.setCode(1000);
+                msg.setData("");
+            } else {
+                msg.setMsg("login failed!");
+                msg.setCode(500);
+                msg.setData("");
+            }
         }
-
         return msg;
     }
 
