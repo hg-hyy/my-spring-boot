@@ -1,5 +1,6 @@
 package com.hg.hyy.vue;
 
+import java.io.IOException;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.hg.hyy.file.Filestrem;
 @RestController
 @RequestMapping("/auth")
 public class VueController {
@@ -20,8 +21,10 @@ public class VueController {
     private UserRepository userRepository;
 
     @PostMapping("/signin")
-    public Msg signin(@RequestBody User user) {
-
+    public Msg signin(@RequestBody User user) throws IOException {
+        Filestrem fs = new Filestrem();
+        // fs.bis_bos();
+        fs.br_bw();
         Msg msg = new Msg("", 0, "");
         for (User us : userRepository.findAll()) {
             if (us.getUsername().equals(user.getUsername()) && us.getPassword().equals(user.getPassword())) {
