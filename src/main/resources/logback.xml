@@ -1,34 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <!--    引入配置文件，获取服务名-->
+    <property resource="application.properties"/>
+    <springProperty scope="context" name="serverName" source="spring.application.name"/>
+    <!--配置规则类的位置-->
+    <conversionRule conversionWord="ip" converterClass="com.hg.hyy.converter.IPConverterConfig" />
+    <conversionRule conversionWord="port" converterClass="com.hg.hyy.converter.PortConverterConfig" />
+    <!-- 定义变量，使用：${name} -->
     <property name="LOG_HOME" value="logs/" />
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度,%msg：日志消息，%n是换行符-->
+    <property name="CONSOLE_LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} | [${serverName}] | [%ip:%port] | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger{50}) | %msg%n"/>
+    <!-- 日志文件不支持颜色 -->
+    <property name="FILE_LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} | [${serverName}] | [%ip:%port] | %-5level | %thread | %logger{50} | %msg%n"/>
     <!-- 控制台输出 -->
     <appender name="Stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- <layout class="ch.qos.logback.classic.PatternLayout"> -->
+        <!-- <pattern>${CONSOLE_LOG_PATTERN}</pattern> -->
+        <!-- </layout> -->
+
         <!-- 日志输出编码 -->
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
-            </pattern>
-        </layout>
+        <encoder charset="UTF-8">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
     </appender>
-    <!-- 按照每天生成日志文件 -->
+    <!-- 每天生成日志文件 -->
     <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
             <FileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
-            </pattern>
-        </layout>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
         <!--日志文件最大的大小-->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
 
-    <!-- java项目 www fhadmin org -->
     <!-- 日志输出级别 -->
     <root level="error">
         <appender-ref ref="Stdout" />

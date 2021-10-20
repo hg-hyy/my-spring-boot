@@ -112,7 +112,7 @@ public class VueController {
     @GetMapping("/sendkafka")
     public String sendkafka() {
 
-        String message = getRandomString(100);
+        String message = getRandomString(10);
 
         KafkaProducer<String, String> producer = KafkaUtil.createProducer(servers);
         KafkaUtil.send(producer, topic, message);
