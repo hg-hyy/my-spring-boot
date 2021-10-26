@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class KafkaUtil implements Runnable {
 
-    public static KafkaConsumer<String, String> createConsumer(String servers, String topic) {
+    public static KafkaConsumer<String, Object> createConsumer(String servers, String topic) {
         Properties properties = new Properties();
 
         // 主机信息
@@ -49,9 +49,11 @@ public class KafkaUtil implements Runnable {
          */
         properties.put("session.timeout.ms", "60000");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        // properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        properties.put("value.deserializer", "com.hg.hyy.seranddeser.JsonDeserialize");
 
-        KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<String, String>(properties);
+
+        KafkaConsumer<String, Object> kafkaConsumer = new KafkaConsumer<String, Object>(properties);
         /**
          * 订阅主题，这个地方只传了一个主题：topic. 这个地方也可以有正则表达式。
          */
@@ -59,7 +61,7 @@ public class KafkaUtil implements Runnable {
         return kafkaConsumer;
     }
 
-    public static String readMessage(KafkaConsumer<String, String> kafkaConsumer, Duration timeout) {
+    public static String readMessage(KafkaConsumer<String, Object> kafkaConsumer, Duration timeout) {
         // 无限循环轮询
         while (true) {
             /**
@@ -67,10 +69,10 @@ public class KafkaUtil implements Runnable {
              * poll返回一个记录列表，每个记录包含了记录所属主题的信息， 记录所在分区的信息，记录在分区里的偏移量，以及键值对。
              * poll需要一个指定的超时参数，指定了方法在多久后可以返回。 发送心跳的频率，告诉群组协调器自己还活着。
              */
-            ConsumerRecords<String, String> records = kafkaConsumer.poll(timeout);
+            ConsumerRecords<String, Object> records = kafkaConsumer.poll(timeout);
             StringBuilder sb = new StringBuilder();
-            for (ConsumerRecord<String, String> record : records) {
-                String value = record.value();
+            for (ConsumerRecord<String, Object> record : records) {
+                Object value = record.value();
                 sb.append(value);
                 kafkaConsumer.commitAsync();
                 // Thread.sleep(1000);
@@ -79,7 +81,7 @@ public class KafkaUtil implements Runnable {
         }
     }
 
-    public static KafkaProducer<String, String> createProducer(String servers) {
+    public static KafkaProducer<String, Object> createProducer(String servers) {
         Properties properties = new Properties();
         // kafkaProps.put("bootstrap.servers","192.168.123.128:9092,192.168.123.129:9092,192.168.123.130:9092");
         // 主机信息（broker）
@@ -125,12 +127,13 @@ public class KafkaUtil implements Runnable {
         // 键为字符串类型
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         // 值为字符串类型
-        properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        return new KafkaProducer<String, String>(properties);
+        // properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        properties.put("value.serializer", "com.hg.hyy.seranddeser.JsonSerialize");
+        return new KafkaProducer<String, Object>(properties);
     }
 
-    public static void send(KafkaProducer<String, String> producer, String topic, String message) {
-        producer.send(new ProducerRecord<String, String>(topic, message));
+    public static void send(KafkaProducer<String, Object> producer, String topic, Object message) {
+        producer.send(new ProducerRecord<String, Object>(topic, message));
     }
 
     @Override

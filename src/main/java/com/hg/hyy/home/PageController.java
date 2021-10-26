@@ -22,6 +22,7 @@ public class PageController {
         return "index";
     }
 
+
     @GetMapping("/test")
     public String test() {
         // int i = 1 / 0;//服务器内部运行异常 跳转500页面
