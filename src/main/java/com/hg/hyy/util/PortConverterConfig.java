@@ -1,4 +1,4 @@
-package com.hg.hyy.converter;
+package com.hg.hyy.util;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -35,7 +35,8 @@ public class PortConverterConfig extends ClassicConverter {
                     ObjectName oName = (ObjectName) it.next();
                     String pValue = (String) server.getAttribute(oName, "protocol");
                     if (StringUtils.equals("HTTP/1.1", pValue)) {
-                        webPort = ObjectUtils.toString(server.getAttribute(oName, "port"));
+                        // webPort = ObjectUtils.toString(server.getAttribute(oName, "port"));
+                        webPort =  ObjectUtils.identityToString(server.getAttribute(oName, "port"));
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.hg.hyy.converter;
+package com.hg.hyy.util;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;

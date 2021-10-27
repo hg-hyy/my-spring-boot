@@ -1,6 +1,4 @@
-package com.hg.hyy.consumingrest;
-
-
+package com.hg.hyy.vue;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -31,9 +29,6 @@ public class Quote {
 
   @Override
   public String toString() {
-    return "Quote{" +
-        "type='" + type + '\'' +
-        ", value=" + value +
-        '}';
+    return "Quote{" + "type='" + type + '\'' + ", value=" + value + '}';
   }
 }

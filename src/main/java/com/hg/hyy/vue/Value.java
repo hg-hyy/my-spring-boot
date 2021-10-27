@@ -1,4 +1,4 @@
-package com.hg.hyy.consumingrest;
+package com.hg.hyy.vue;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

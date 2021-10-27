@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
-import com.hg.hyy.file.Filestrem;
 import com.hg.hyy.grpc.HelloWorldClient;
 import com.hg.hyy.grpc.HelloWorldServer;
 import com.hg.hyy.kafka.KafkaClient;
