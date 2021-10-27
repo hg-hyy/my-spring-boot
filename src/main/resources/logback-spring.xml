@@ -5,8 +5,8 @@
     <!--    引入配置文件，获取服务名-->
     <property resource="application.properties"/>
     <!--配置规则类的位置-->
-    <conversionRule conversionWord="ip" converterClass="com.hg.hyy.converter.IPConverterConfig" />
-    <conversionRule conversionWord="port" converterClass="com.hg.hyy.converter.PortConverterConfig" />
+    <conversionRule conversionWord="ip" converterClass="com.hg.hyy.util.IPConverterConfig" />
+    <conversionRule conversionWord="port" converterClass="com.hg.hyy.util.PortConverterConfig" />
     <!-- 定义变量，使用：${name} -->
     <property name="LOG_HOME" value="logs/" />
     <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度,%msg：日志消息，%n是换行符-->

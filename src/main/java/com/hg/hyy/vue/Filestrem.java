@@ -10,7 +10,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 
 public class Filestrem {
 
@@ -59,7 +61,12 @@ public class Filestrem {
         String s;
         while ((s = br.readLine()) != null) {
 
-            bw.write(s);
+            try {
+              bw.write(s);  
+            } catch (NullPointerException e) {
+                
+            }
+            
             bw.newLine();
             bw.flush();
 
@@ -67,5 +74,28 @@ public class Filestrem {
 
         br.close();
         bw.close();
+    }
+
+    public void userrecord(ArrayList<String> al) throws IOException {
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter("logs\\2.txt"));
+        for (String s : al) {
+
+            try {
+                bw.write(s);  
+              } catch (NullPointerException e) {
+                  
+              }
+            bw.newLine();
+            bw.flush();
+        }
+        bw.close();
+    }
+
+    public void record(Object O) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("logs\\1.txt", true));
+
+        oos.writeObject(O);
+        oos.close();
     }
 }

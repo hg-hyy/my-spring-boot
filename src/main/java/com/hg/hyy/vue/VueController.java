@@ -123,6 +123,15 @@ public class VueController {
         Filestrem fs = new Filestrem();
         // fs.bis_bos();
         fs.br_bw();
+        fs.record(user);
+
+        ArrayList<String> al = new ArrayList<String>();
+        al.add(user.getUsername());
+        al.add(user.getPassword());
+        al.add(user.getRole());
+
+        fs.userrecord(al);
+        
         Msg msg = new Msg("", 0, "");
         for (User us : userRepository.findAll()) {
             if (us.getUsername().equals(user.getUsername()) && us.getPassword().equals(user.getPassword())) {
