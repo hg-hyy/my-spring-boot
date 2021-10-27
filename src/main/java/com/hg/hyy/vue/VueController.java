@@ -26,8 +26,9 @@ import com.hg.hyy.kafka.KafkaData;
 import com.hg.hyy.kafka.MyProducer;
 import com.hg.hyy.util.UserSerializationUtil;
 
+//@RestController，一般是使用在类上的，它表示的意思其实就是结合了@Controller和@ResponseBody两个注解，
 @RestController
-@RequestMapping("/vue")
+@RequestMapping("/v1")
 public class VueController {
 
     private String account = "admin";
@@ -37,11 +38,9 @@ public class VueController {
     private String topic = "java_kafka_topic";
     @Autowired
 
-
     private static final Logger log = LoggerFactory.getLogger(VueController.class);
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
-
 
     @GetMapping("/")
     public String index() {
@@ -50,14 +49,15 @@ public class VueController {
 
     @GetMapping("/log")
     public String log() {
-       
+
         log.error("我是一条error日志");
         return "log is log";
     }
+
     @SuppressWarnings("unused")
     @GetMapping("/err")
     public String err() {
-        
+
         try {
             int a = 1 / 0;
         } catch (Exception e) {
@@ -74,9 +74,10 @@ public class VueController {
         return "greet";
     }
 
+    @SuppressWarnings("unused")
     @GetMapping("/test")
     public String test() {
-        // int i = 1 / 0;//服务器内部运行异常 跳转500页面
+        int i = 1 / 0;// 服务器内部运行异常 跳转500页面
         return "500";
     }
 
@@ -116,6 +117,7 @@ public class VueController {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
+
     @PostMapping("/signin")
     public Msg signin(@RequestBody User user) throws IOException {
         Filestrem fs = new Filestrem();

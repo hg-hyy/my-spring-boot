@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by shirukai on 2018/8/14
- * protostuff 序列化/反序列化工具类
+ * Created by shirukai on 2018/8/14 protostuff 序列化/反序列化工具类
  */
 public class ProtostuffUtil {
     private static Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
@@ -42,6 +41,7 @@ public class ProtostuffUtil {
         ProtostuffIOUtil.mergeFrom(bytes, message, schema);
         return message;
     }
+
     @SuppressWarnings("unchecked")
     private static <T> Schema<T> getSchema(Class<T> tClass) {
         Schema<T> schema = (Schema<T>) cachedSchema.get(tClass);
