@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 // import org.apache.kafka.common.serialization.StringDeserializer;
 import java.util.*;
 
-import com.hg.hyy.vue.KafkaData;
-
 public class MyProducer {
     private final static Logger logger = LoggerFactory.getLogger(MyProducer.class);
 

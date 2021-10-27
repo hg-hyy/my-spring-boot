@@ -1,9 +1,9 @@
 package com.hg.hyy.seranddeser;
 
-import com.hg.hyy.vue.KafkaData;
-
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hg.hyy.kafka.KafkaData;
+
 import org.apache.kafka.common.serialization.Deserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.hg.hyy.kafka;
+package com.hg.hyy.util;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;

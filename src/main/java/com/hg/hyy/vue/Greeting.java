@@ -1,4 +1,4 @@
-package com.hg.hyy.greeting;
+package com.hg.hyy.vue;
 
 public class Greeting {
 

@@ -1,4 +1,4 @@
-package com.hg.hyy.vue;
+package com.hg.hyy.kafka;
 
 import java.util.List;
 import java.util.Map;

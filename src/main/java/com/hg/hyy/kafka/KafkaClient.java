@@ -13,7 +13,7 @@ import java.util.*;
  * @author hyy
  * @since 20211020 10:30
  */
-public class KafkaUtil implements Runnable {
+public class KafkaClient implements Runnable {
 
     public static KafkaConsumer<String, Object> createConsumer(String servers, String topic) {
         Properties properties = new Properties();
