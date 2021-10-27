@@ -238,7 +238,6 @@ public final class GreeterGrpc {
     }
 
     @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
@@ -249,7 +248,7 @@ public final class GreeterGrpc {
   }
 
   private static abstract class GreeterBaseDescriptorSupplier
-      implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
+      implements io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     GreeterBaseDescriptorSupplier() {}
 
     @java.lang.Override

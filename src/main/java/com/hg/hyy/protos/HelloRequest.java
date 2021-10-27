@@ -24,7 +24,6 @@ private static final long serialVersionUID = 0L;
   }
 
   @java.lang.Override
-  @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
     return new HelloRequest();
@@ -178,7 +177,8 @@ private static final long serialVersionUID = 0L;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
-
+  
+  @SuppressWarnings("unchecked")
   @java.lang.Override
   public int hashCode() {
     if (memoizedHashCode != 0) {
