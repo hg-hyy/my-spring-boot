@@ -42,7 +42,7 @@ public class ProtostuffUtil {
         ProtostuffIOUtil.mergeFrom(bytes, message, schema);
         return message;
     }
-
+    @SuppressWarnings("unchecked")
     private static <T> Schema<T> getSchema(Class<T> tClass) {
         Schema<T> schema = (Schema<T>) cachedSchema.get(tClass);
         if (schema == null) {

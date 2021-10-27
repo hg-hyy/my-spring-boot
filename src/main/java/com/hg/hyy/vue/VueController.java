@@ -54,7 +54,7 @@ public class VueController {
         log.error("我是一条error日志");
         return "log is log";
     }
-
+    @SuppressWarnings("unused")
     @GetMapping("/err")
     public String err() {
         
