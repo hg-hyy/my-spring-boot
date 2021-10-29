@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-
+import org.springframework.core.env.Environment;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.hg.hyy.grpc.HelloWorldClient;
 import com.hg.hyy.grpc.HelloWorldServer;
 import com.hg.hyy.kafka.KafkaClient;
@@ -27,6 +30,7 @@ import com.hg.hyy.kafka.MyProducer;
 import com.hg.hyy.util.UserSerializationUtil;
 
 //@RestController，一般是使用在类上的，它表示的意思其实就是结合了@Controller和@ResponseBody两个注解，
+@Api(tags = "vue")
 @RestController
 @RequestMapping("/v1")
 public class VueController {
@@ -41,7 +45,9 @@ public class VueController {
     private static final Logger log = LoggerFactory.getLogger(VueController.class);
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
+    private Environment environment;
 
+    @ApiOperation("index")
     @GetMapping("/")
     public String index() {
         return "index";
@@ -278,5 +284,21 @@ public class VueController {
             e.printStackTrace();
         }
         return "demo";
+    }
+    @RequestMapping("/test2/test")
+    @ResponseBody
+    public String getTest(){
+        return "hello,"+environment.getProperty("cn.hg.hyy.test1")+","+"test2:"+environment.getProperty("cn.hg.hyy.test2");
+    }
+
+    @GetMapping("/sb")
+    public String sb(){
+        try {
+            Sb.sb();
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+        }
+        return "ok";
     }
 }

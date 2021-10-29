@@ -10,9 +10,9 @@
     <!-- 定义变量，使用：${name} -->
     <property name="LOG_HOME" value="logs/" />
     <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度,%msg：日志消息，%n是换行符-->
-    <property name="CONSOLE_LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} | [${serverName}] | [%ip:%port] | %highlight(%-5level) | %boldYellow(%thread) | %boldGreen(%logger{50}) | %msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} [${serverName}] [%ip:%port] %highlight(%-5level) %boldYellow(%thread) %boldGreen(%logger{50}) %msg%n"/>
     <!-- 日志文件不支持颜色 -->
-    <property name="FILE_LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} | [${serverName}] | [%ip:%port] | %-5level | %thread | %logger{50} | %msg%n"/>
+    <property name="FILE_LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} [${serverName}] [%ip:%port] %-5level %thread %logger{50} %msg%n"/>
     <!-- 控制台输出 -->
     <appender name="Stdout" class="ch.qos.logback.core.ConsoleAppender">
         <!-- <layout class="ch.qos.logback.classic.PatternLayout"> -->

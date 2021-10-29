@@ -25,7 +25,6 @@ public final class HelloReply extends com.google.protobuf.GeneratedMessageV3 imp
   }
 
   @java.lang.Override
-  @SuppressWarnings({ "unused" })
   protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
     return new HelloReply();
   }
