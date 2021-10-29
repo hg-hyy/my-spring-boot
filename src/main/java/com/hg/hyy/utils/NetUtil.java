@@ -1,4 +1,4 @@
-package com.hg.hyy.util;
+package com.hg.hyy.utils;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;

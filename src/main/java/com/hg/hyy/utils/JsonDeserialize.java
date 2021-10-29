@@ -1,4 +1,4 @@
-package com.hg.hyy.util;
+package com.hg.hyy.utils;
 
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;

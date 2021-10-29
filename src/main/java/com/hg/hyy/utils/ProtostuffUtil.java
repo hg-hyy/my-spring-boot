@@ -1,4 +1,4 @@
-package com.hg.hyy.util;
+package com.hg.hyy.utils;
 
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
