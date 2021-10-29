@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import io.swagger.annotations.ApiImplicitParams;
 
 import com.hg.hyy.entity.Student;
-import com.hg.hyy.service.StudentService;
 import com.hg.hyy.utils.Filestrem;
 import com.hg.hyy.utils.UserSerializationUtil;
+import com.hg.hyy.config.PersonConfig;
 import com.hg.hyy.entity.Greeting;
 import com.hg.hyy.entity.Msg;
 import com.hg.hyy.entity.Sb;
@@ -43,6 +45,7 @@ import com.hg.hyy.kafka.KafkaClient;
 import com.hg.hyy.kafka.KafkaData;
 import com.hg.hyy.kafka.MyProducer;
 import com.hg.hyy.mqtt.MqttPub;
+import com.hg.hyy.service.StudentService;
 import com.hg.hyy.vo.ResponseVo;
 
 //@RestController，一般是使用在类上的，它表示的意思其实就是结合了@Controller和@ResponseBody两个注解，
@@ -64,6 +67,10 @@ public class VueController {
 
     @Autowired
     private MqttPub mqttPub;
+
+    @Autowired
+    private PersonConfig personConfig;
+
 
     @ApiOperation(value = "mqtt发布主题", notes = "测试发布主题")
     @GetMapping(value = "/mqtt")
@@ -383,6 +390,17 @@ public class VueController {
     @GetMapping("/get_students")
     public ResponseVo<Collection<Student>> getAllStudent() {
         return studentService.getAllStudent();
+    }
+
+
+    @ApiOperation("配置文件")
+    @GetMapping("/get_app")
+    public String contextLoads() {
+
+        Map<String, String> person = personConfig.getPerson();
+        List<String> list = personConfig.getList();
+
+        return "image:" + JSONObject.fromObject(person).toString()+"list:" + JSONArray.fromObject(list).toString();
     }
 
 }
