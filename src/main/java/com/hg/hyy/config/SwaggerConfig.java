@@ -1,4 +1,4 @@
-package com.hg.hyy.swagger;
+package com.hg.hyy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

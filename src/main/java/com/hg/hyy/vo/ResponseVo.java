@@ -1,4 +1,4 @@
-package com.hg.hyy.swagger;
+package com.hg.hyy.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

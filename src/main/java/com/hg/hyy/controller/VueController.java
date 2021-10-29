@@ -41,9 +41,9 @@ import com.hg.hyy.kafka.KafkaClient;
 import com.hg.hyy.kafka.KafkaData;
 import com.hg.hyy.kafka.MyProducer;
 import com.hg.hyy.mqtt.MqttPub;
-import com.hg.hyy.swagger.ResponseVo;
 import com.hg.hyy.util.Filestrem;
 import com.hg.hyy.util.UserSerializationUtil;
+import com.hg.hyy.vo.ResponseVo;
 
 //@RestController，一般是使用在类上的，它表示的意思其实就是结合了@Controller和@ResponseBody两个注解，
 @Api(tags = "vue")

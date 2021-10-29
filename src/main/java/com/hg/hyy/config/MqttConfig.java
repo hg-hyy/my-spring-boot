@@ -1,7 +1,10 @@
-package com.hg.hyy.mqtt;
+package com.hg.hyy.config;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import com.hg.hyy.mqtt.MqttPub;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;

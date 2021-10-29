@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import com.hg.hyy.entity.Student;
-import com.hg.hyy.swagger.ResponseVo;
+import com.hg.hyy.vo.ResponseVo;
 
 @Service
 public class StudentService {
