@@ -1,4 +1,4 @@
-package com.hg.hyy.vue;
+package com.hg.hyy.entity;
 
 import java.io.Serializable;
 

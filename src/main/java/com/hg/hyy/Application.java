@@ -3,7 +3,7 @@ package com.hg.hyy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.hg.hyy.vue.Quote;
+import com.hg.hyy.entity.Quote;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

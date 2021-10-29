@@ -3,7 +3,7 @@ package com.hg.hyy.util;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
-import com.hg.hyy.vue.User;
+import com.hg.hyy.entity.User;
 
 public class UserSerializationUtil {
 
@@ -15,7 +15,7 @@ public class UserSerializationUtil {
      * @param user
      * @return
      */
-    public static byte[] serialize(com.hg.hyy.vue.User user) {
+    public static byte[] serialize(User user) {
         // Serializes the {@code message} into a byte array using the given schema
         return ProtostuffIOUtil.toByteArray(user, schema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
     }

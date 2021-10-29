@@ -9,7 +9,7 @@ import com.hg.hyy.swagger.ResponseVo;
 
 @Service
 public class StudentService {
-    // 这里我们不适用数据库, 使用Map集合来模拟数据库中的表
+    // 这里我们不使用数据库, 使用Map集合来模拟数据库中的表
     private static Map<Integer, Student> studentMap = new HashMap<>();
     private static Integer studentId = 10001;
     static {

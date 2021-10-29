@@ -1,4 +1,4 @@
-package com.hg.hyy.vue;
+package com.hg.hyy.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
