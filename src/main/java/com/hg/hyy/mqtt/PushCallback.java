@@ -29,7 +29,7 @@ public class PushCallback implements MqttCallback {
     @Override
     public void connectionLost(Throwable throwable) {
         // 连接丢失后，一般在这里面进行重连
-        logger.error("连接断开，可以做重连");
+        // logger.error("连接断开，可以做重连");
         if (client == null || !client.isConnected()) {
             mqttConfig.getMqttPub();
         }

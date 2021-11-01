@@ -1,7 +1,12 @@
 package com.hg.hyy.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
@@ -31,6 +36,7 @@ import io.swagger.annotations.ApiImplicitParams;
 
 import com.hg.hyy.entity.Student;
 import com.hg.hyy.utils.Filestrem;
+import com.hg.hyy.utils.HmacSHA256;
 import com.hg.hyy.utils.UserSerializationUtil;
 import com.hg.hyy.config.PersonConfig;
 import com.hg.hyy.entity.Greeting;
@@ -70,7 +76,6 @@ public class VueController {
 
     @Autowired
     private PersonConfig personConfig;
-
 
     @ApiOperation(value = "mqtt发布主题", notes = "测试发布主题")
     @GetMapping(value = "/mqtt")
@@ -392,7 +397,6 @@ public class VueController {
         return studentService.getAllStudent();
     }
 
-
     @ApiOperation("配置文件")
     @GetMapping("/get_app")
     public String contextLoads() {
@@ -400,7 +404,53 @@ public class VueController {
         Map<String, String> person = personConfig.getPerson();
         List<String> list = personConfig.getList();
 
-        return "image:" + JSONObject.fromObject(person).toString()+"list:" + JSONArray.fromObject(list).toString();
+        return "image:" + JSONObject.fromObject(person).toString() + "list:" + JSONArray.fromObject(list).toString();
+    }
+
+    @ApiOperation("vigap_api")
+    @GetMapping("/vigap")
+    public String vigap() throws UnsupportedEncodingException {
+        String key = "igzldvp-zaz3rpr-8xrdnlp-mpwr9";
+
+        LocalDateTime ldt = LocalDateTime.now(); // 当前日期和时间
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String localTime = df.format(ldt);
+
+        Map<String, String> m = new HashMap<String, String>();
+
+        List<String> l = new ArrayList<String>();
+        TreeSet<String> t = new TreeSet<String>();
+        String method = "GET";
+        String ip = "192.168.20.33";
+        String api = "/api/v1/systems/dashboard";
+        l.add(method);
+        l.add(ip);
+        l.add(api);
+        String url = String.join("\\n", l);
+
+        m.put("AccessKeyId", "472b307a-0d62fc1a-49368bc6-k01mk");
+        m.put("SignatureMethod", "HmacSHA256");
+        m.put("SignatureVersion", "2");
+        m.put("Timestamp", localTime);
+
+        for (Map.Entry<String, String> entry : m.entrySet()) {
+            t.add(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "utf-8"));
+        }
+
+        String param = String.join("&", t);
+
+        // 这里要使用转义。。。。。。
+        String message = url + "\\n" + param + "\\n";
+
+        String reqs = HmacSHA256.sha256_mac(message, key);
+        String rust = Base64.getEncoder().encodeToString(reqs.toUpperCase().getBytes("utf-8")).toString();
+        String Signature = URLEncoder.encode(rust, "utf-8");
+
+        String host = "https://192.168.20.33:10000";
+
+        String reqUrl = host + api + "?" + param + "&" + "Signature=" + Signature;
+
+        return reqUrl;
     }
 
 }
