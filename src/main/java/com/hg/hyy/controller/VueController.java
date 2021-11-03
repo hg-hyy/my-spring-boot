@@ -128,6 +128,13 @@ public class VueController {
     }
 
     @ApiOperation("测试CORS")
+    @GetMapping("/greeting")
+    public Greeting greeting(@RequestParam(required = false, defaultValue = "World") String name) {
+        log.error("greeting success");
+        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    }
+
+    @ApiOperation("测试CORS")
     @GetMapping("/greeting-javaconfig")
     public Greeting greetingWithJavaconfig(@RequestParam(required = false, defaultValue = "World") String name) {
         log.error("==== in greeting ====");

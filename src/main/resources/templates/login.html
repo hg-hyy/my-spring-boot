@@ -3,18 +3,110 @@
   <head>
     <meta charset="UTF-8" />
     <title>Login</title>
+    <link
+      th:href="@{/css/bootstrap.min.css}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+        text-align: center;
+      }
+      .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+      }
+      .form-signin .checkbox {
+        font-weight: 400;
+      }
+
+      .form-signin .form-floating:focus-within {
+        z-index: 2;
+      }
+      .form-signin input[type="text"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+    </style>
   </head>
   <body>
-    <div th:if="${param.error}">Invalid username and password.</div>
-    <div th:if="${param.logout}">You have been logged out.</div>
-    <form th:action="@{/v1/login}" method="post">
-      <div>
-        <label> User Name : <input type="text" name="username" /> </label>
-      </div>
-      <div>
-        <label> Password: <input type="password" name="password" /> </label>
-      </div>
-      <div><input type="submit" value="Sign In" /></div>
-    </form>
+    <div class="form-signin">
+      <form th:action="@{/login}" method="post">
+        <!-- <img
+          class="mb-4"
+          th:src="@{/pic/bootstrap-logo.svg}"
+          alt="spring"
+          width="72"
+          height="57"
+        /> -->
+        <img class="mb-4" th:src="@{/pic/logo.svg}" alt="spring" width="144" />
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <div class="form-floating">
+          <input
+            class="form-control"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Username"
+          />
+          <label for="username">Email address</label>
+        </div>
+
+        <div class="form-floating">
+          <input
+            class="form-control"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+          />
+          <label for="password">Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+          <label>
+            <input type="checkbox" value="remember-me" /> Remember me
+          </label>
+        </div>
+
+        <div>
+          <div class="text-danger" th:if="${param.error}">
+            Invalid username or password.
+          </div>
+          <div class="text-success" th:if="${param.logout}">
+            You have been logged out.
+          </div>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+          Sign in
+        </button>
+        <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
+      </form>
+    </div>
   </body>
 </html>
