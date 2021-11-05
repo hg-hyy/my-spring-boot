@@ -49,7 +49,7 @@ public class TomcatConfig {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
         tomcat.addConnectorCustomizers((connector -> {
             Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
-            connector.setScheme("https");
+            connector.setScheme("http");
             // Connector监听的http的端口号
             connector.setPort(8080);
             connector.setSecure(false);

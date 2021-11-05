@@ -477,7 +477,7 @@ public class VueController {
     }
 
     @GetMapping("/ws")
-    public void sendMsg() {
+    public String sendMsg() {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         // 模拟向已连接的WebSocket客户端发送系统提醒
         for (WsAnnotation1 item : WsAnnotation1.webSocketSet) {
@@ -489,11 +489,12 @@ public class VueController {
             }
 
         }
+        return "WsAnnotation1" + sf.format(new Date()) + "，请尽快完成任务!";
 
     }
 
-    @GetMapping("/ws1")
-    @SendTo("/spring3.ws")
+    @GetMapping("/spring.ws")
+    @SendTo("/spring.ws")
     public String greeting() {
         return "Hello";
     }
