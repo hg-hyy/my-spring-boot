@@ -13,7 +13,10 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.core.env.Environment;
+import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.util.HtmlUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +46,8 @@ import com.hg.hyy.utils.HmacSHA256;
 import com.hg.hyy.utils.UserSerializationUtil;
 import com.hg.hyy.config.PersonConfig;
 import com.hg.hyy.entity.Greeting;
+import com.hg.hyy.entity.Hello;
+import com.hg.hyy.entity.HelloMessage;
 import com.hg.hyy.entity.Msg;
 import com.hg.hyy.entity.Sb;
 import com.hg.hyy.entity.Topic;
@@ -493,10 +498,29 @@ public class VueController {
 
     }
 
-    @GetMapping("/spring.ws")
-    @SendTo("/spring.ws")
-    public String greeting() {
-        return "Hello";
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public Hello hello(HelloMessage message) throws Exception {
+        Thread.sleep(1000); // simulated delay
+        return new Hello("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+    }
+
+    @Autowired
+    SimpMessagingTemplate SMT;
+
+    @GetMapping("/hello")
+    @SendTo("/topic/greetings")
+    public Hello hello1(HelloMessage message) throws Exception {
+        Thread.sleep(1000); // simulated delay
+        // SMT.convertAndSend("/topic/greetings", new Greeting("Hello, " +
+        // HtmlUtils.htmlEscape(message.getName()) + "!"));
+        return new Hello("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+    }
+
+    @GetMapping("/send")
+    public void subscription() throws MessagingException, UnsupportedEncodingException {
+        SMT.convertAndSend("/topic/greetings", new Hello("hello,stomp"));
+
     }
 
 }

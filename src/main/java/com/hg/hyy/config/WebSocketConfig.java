@@ -33,7 +33,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
      */
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(myHandler(), "/spring.ws").addInterceptors(new WebSocketInterceptor());
+        registry.addHandler(myHandler(), "/spring.ws").addInterceptors(new WebSocketInterceptor())
+                .setAllowedOrigins("*");
         registry.addHandler(myHandler(), "/socketJs/spring.ws").addInterceptors(new WebSocketInterceptor())
                 .withSockJS();
 
