@@ -3,6 +3,7 @@ package com.hg.hyy.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.core.env.Environment;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,7 @@ import com.hg.hyy.entity.Sb;
 import com.hg.hyy.entity.Topic;
 import com.hg.hyy.entity.User;
 import com.hg.hyy.entity.UserRepository;
+import com.hg.hyy.websocket.WsAnnotation1;
 import com.hg.hyy.grpc.HelloWorldClient;
 import com.hg.hyy.grpc.HelloWorldServer;
 import com.hg.hyy.kafka.KafkaClient;
@@ -471,6 +474,28 @@ public class VueController {
         String reqUrl = host + api + "?" + param + "&" + "Signature=" + Signature;
 
         return reqUrl;
+    }
+
+    @GetMapping("/ws")
+    public void sendMsg() {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        // 模拟向已连接的WebSocket客户端发送系统提醒
+        for (WsAnnotation1 item : WsAnnotation1.webSocketSet) {
+            try {
+                item.sendMessage("系统提醒：当前时间，" + sf.format(new Date()) + "，请尽快完成任务!");
+            } catch (IOException e) {
+                e.printStackTrace();
+                continue;
+            }
+
+        }
+
+    }
+
+    @GetMapping("/ws1")
+    @SendTo("/spring3.ws")
+    public String greeting() {
+        return "Hello";
     }
 
 }

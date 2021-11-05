@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.hg</groupId>
 	<artifactId>hyy</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>v1</version>
 	<packaging>war</packaging>
 	<name>hyy</name>
 	<description>Demo project for Spring Boot</description>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<version>3.0.0</version>
 		</dependency>
 		<!-- Object、String utils -->
 		<dependency>
@@ -205,6 +205,7 @@
 				<version>1.6.2</version>
 			</extension>
 		</extensions> -->
+		<finalName>vue-spring</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

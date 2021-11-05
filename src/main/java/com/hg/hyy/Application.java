@@ -2,6 +2,7 @@ package com.hg.hyy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import com.hg.hyy.entity.Quote;
 
@@ -11,14 +12,17 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @SpringBootApplication
-public class Application {
+public class Application extends SpringBootServletInitializer {
+	// 注意，如果您正在构建WAR文件并部署它，则需要WebApplicationInitializer。如果你喜欢运行一个嵌入式Web服务器，那么你根本不需要这个。
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -28,6 +32,16 @@ public class Application {
 		sa.setBannerMode(Banner.Mode.OFF);
 		sa.run(args);
 		// SpringApplication.run(Application.class, args);
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(Application.class);
+	}
+
+	@Bean
+	public ServerEndpointExporter serverEndpointExporter() {
+		return new ServerEndpointExporter();
 	}
 
 	@Bean
