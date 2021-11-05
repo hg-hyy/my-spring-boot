@@ -1,6 +1,6 @@
 package com.hg.hyy.config;
 
-import com.hg.hyy.utils.TestFilter;
+import com.hg.hyy.filters.TestFilter;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +9,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * CorsFilter相关配置
+ *
+ * @author hyy
+ * @date 2021-11-05
+ * @since 1.0.0
+ */
 @Configuration
 public class CorsFilterConfig {
 

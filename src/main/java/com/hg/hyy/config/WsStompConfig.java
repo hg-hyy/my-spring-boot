@@ -1,6 +1,6 @@
 package com.hg.hyy.config;
 
-import com.hg.hyy.controller.WsChannelInterceptor;
+import com.hg.hyy.Interceptors.WsChannelInterceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,10 +11,10 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * WebSocket相关配置
+ * WebSocket相关配置基于stomp
  *
- * @author zifangsky
- * @date 2018/9/30
+ * @author hyy
+ * @date 2021-11-05
  * @since 1.0.0
  */
 @Configuration
@@ -25,7 +25,7 @@ public class WsStompConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp-websocket").withSockJS();
+        registry.addEndpoint("/stomp.ws").withSockJS();
     }
 
     @Override

@@ -4,6 +4,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * 视图映射相关配置
+ *
+ * @author hyy
+ * @date 2021-11-05
+ * @since 1.0.0
+ */
 @Configuration
 public class ViewConfig implements WebMvcConfigurer {
 

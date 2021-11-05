@@ -8,6 +8,13 @@ import javax.websocket.server.ServerEndpointConfig;
 
 import com.hg.hyy.websocket.WsEndpoint;
 
+/**
+ * WebSocket相关配置基于编程javax.websocket
+ *
+ * @author hyy
+ * @date 2021-11-05
+ * @since 1.0.0
+ */
 public class WsEndpointConfig implements ServerApplicationConfig {
 
     @Override

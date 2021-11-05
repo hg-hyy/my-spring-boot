@@ -121,9 +121,8 @@ public class VueController {
     @ApiOperation("测试 get传参 model传参到html")
     // You can also add the @CrossOrigin annotation at the controller class level as
     // well, to enable CORS on all handler methods of this class.
-    @CrossOrigin(origins = "http://localhost:8080", maxAge = 3600)
     @GetMapping("/greet")
-    public String greeting(@RequestParam(value = "name", defaultValue = "World") String name, Model model) {
+    public String greet(@RequestParam(value = "name", defaultValue = "World") String name, Model model) {
         log.error("---");
         Greeting g = new Greeting(counter.incrementAndGet(), String.format(template, name));
         model.addAttribute("g", g);
@@ -131,6 +130,7 @@ public class VueController {
     }
 
     @ApiOperation("测试CORS")
+    @CrossOrigin(origins = "https://localhost:8080", maxAge = 3600)
     @GetMapping("/greeting")
     public Greeting greeting(@RequestParam(required = false, defaultValue = "World") String name) {
         log.error("greeting success");
@@ -138,7 +138,7 @@ public class VueController {
     }
 
     @ApiOperation("测试CORS")
-    @GetMapping("/greeting-javaconfig")
+    @GetMapping("/greeting1")
     public Greeting greetingWithJavaconfig(@RequestParam(required = false, defaultValue = "World") String name) {
         log.error("==== in greeting ====");
         return new Greeting(counter.incrementAndGet(), String.format(template, name));

@@ -20,8 +20,8 @@ import java.util.Set;
  * @date 2021-10-10
  * @description
  */
-public class PortConverterConfig extends ClassicConverter {
-    private static final Logger logger = LoggerFactory.getLogger(PortConverterConfig.class);
+public class PortConverterUtil extends ClassicConverter {
+    private static final Logger logger = LoggerFactory.getLogger(PortConverterUtil.class);
     private static String webPort;
 
     static {
@@ -36,7 +36,7 @@ public class PortConverterConfig extends ClassicConverter {
                     String pValue = (String) server.getAttribute(oName, "protocol");
                     if (StringUtils.equals("HTTP/1.1", pValue)) {
                         // webPort = ObjectUtils.toString(server.getAttribute(oName, "port"));
-                        webPort =  ObjectUtils.identityToString(server.getAttribute(oName, "port"));
+                        webPort = ObjectUtils.identityToString(server.getAttribute(oName, "port"));
                     }
                 }
             }
