@@ -49,12 +49,12 @@ public class TomcatConfig {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
         tomcat.addConnectorCustomizers((connector -> {
             Http11NioProtocol protocol = (Http11NioProtocol) connector.getProtocolHandler();
-            connector.setScheme("http");
+            connector.setScheme("https");
             // Connector监听的http的端口号
             connector.setPort(8080);
             connector.setSecure(false);
             // 监听到http的端口号后转向到的https的端口号
-            // connector.setRedirectPort(8443);
+            connector.setRedirectPort(8443);
             protocol.setMaxThreads(200);
             protocol.setMaxConnections(1000);
             // protocol这个对象中还有很多tomcat的参数可以设置，读者可以自己了解了解。
