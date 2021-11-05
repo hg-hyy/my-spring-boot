@@ -37,9 +37,9 @@
       };
       Chat.initialize = function () {
         if (window.location.protocol == "http:") {
-          Chat.connect("ws://" + window.location.host + "/spring3.ws");
+          Chat.connect("ws://" + window.location.host + "/spring.ws");
         } else {
-          Chat.connect("wss://" + window.location.host + "/spring3.ws");
+          Chat.connect("wss://" + window.location.host + "/spring.ws");
         }
       };
       Chat.sendMessage = function () {

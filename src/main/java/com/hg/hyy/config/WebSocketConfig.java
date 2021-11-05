@@ -11,7 +11,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 /**
- * WebSocket相关配置基于spring-websocket
+ * WebSocket相关配置基于spring.websocket
  *
  * @author hyy
  * @date 2021-11-05
@@ -33,7 +33,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
      */
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(myHandler(), "/spring3.ws").addInterceptors(new WebSocketInterceptor());
+        registry.addHandler(myHandler(), "/spring.ws").addInterceptors(new WebSocketInterceptor());
         registry.addHandler(myHandler(), "/socketJs/spring.ws").addInterceptors(new WebSocketInterceptor())
                 .withSockJS();
 

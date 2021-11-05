@@ -20,10 +20,12 @@
 
       window.onload = function () {
         if ("WebSocket" in window) {
-          websocket = new WebSocket("ws://" + host + "/annotation.ws?userId=1");
+          websocket = new WebSocket(
+            "ws://" + host + "/annotation1.ws?userId=1"
+          );
         } else if ("MozWebSocket" in window) {
           websocket = new MozWebSocket(
-            "ws://" + host + "/annotation.ws?userId=1"
+            "ws://" + host + "/annotation1.ws?userId=1"
           );
         } else {
           websocket = new SockJS(

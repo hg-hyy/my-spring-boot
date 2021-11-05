@@ -26,7 +26,7 @@ public class WsEndpointConfig implements ServerApplicationConfig {
     public Set<ServerEndpointConfig> getEndpointConfigs(Set<Class<? extends Endpoint>> scanned) {
         Set<ServerEndpointConfig> result = new HashSet<ServerEndpointConfig>();
         if (scanned.contains(WsEndpoint.class)) {
-            result.add(ServerEndpointConfig.Builder.create(WsEndpoint.class, "/spring.ws").build());
+            result.add(ServerEndpointConfig.Builder.create(WsEndpoint.class, "/endpoint.ws").build());
         }
         return result;
     }

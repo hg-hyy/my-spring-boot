@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-@ServerEndpoint("/spring1.ws")
+@ServerEndpoint("/annotation1.ws")
 public class WsAnnotation1 {
 
     // 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。

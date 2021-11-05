@@ -10,7 +10,7 @@ import javax.websocket.server.ServerEndpoint;
 import org.springframework.stereotype.Component;
 
 @Component
-@ServerEndpoint(value = "/spring2.ws")
+@ServerEndpoint(value = "/annotation.ws")
 public class WsAnnotation {
     private static final Set<WsAnnotation> connections = new CopyOnWriteArraySet<WsAnnotation>();
     private Session session;
