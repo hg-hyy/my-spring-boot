@@ -62,7 +62,7 @@ public class TomcatConfig {
 
         /*
          * tomcat.addConnectorCustomizers(new TomcatConnectorCustomizer() {
-         * 
+         *
          * @Override public void customize(Connector connector) { Http11NioProtocol
          * protocol = (Http11NioProtocol) connector.getProtocolHandler();
          * protocol.setMaxThreads(200); protocol.setMaxConnections(1000); } });
@@ -71,21 +71,16 @@ public class TomcatConfig {
         return tomcat;
     }
 
-    /**
-     * 创建wss协议接口
-     *
-     * @return
-     */
+    // 创建wss协议接口
     @Bean
     public TomcatContextCustomizer tomcatContextCustomizer() {
-        System.out.println("==============init===========");
         return new TomcatContextCustomizer() {
             @Override
             public void customize(Context context) {
-                System.out.println("===========init   customize===========");
                 context.addServletContainerInitializer(new WsSci(), null);
             }
 
         };
     }
+
 }
