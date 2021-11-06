@@ -55,10 +55,13 @@ public class MqttPub {
                 client.connect(options);
                 client.setCallback(pushCallback);
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
+                log.error("mqtt server 未启动，连接失败。");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error("mqtt client 创建失败。");
+
         }
     }
 
@@ -101,7 +104,9 @@ public class MqttPub {
         try {
             MqttPub.getClient().subscribe(topic, qos);
         } catch (MqttException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error("mqtt server 连接失败，订阅主题失败。");
+
         }
     }
 }

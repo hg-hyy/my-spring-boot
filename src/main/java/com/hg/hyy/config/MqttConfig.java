@@ -3,6 +3,8 @@ package com.hg.hyy.config;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.ConnectException;
+
 import com.hg.hyy.mqtt.MqttPub;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +37,9 @@ public class MqttConfig {
     private String defaultTopic;
 
     @Bean
-    public MqttPub getMqttPub() {
+    public MqttPub getMqttPub() throws ConnectException {
         mqttPub.connect(hostUrl, clientId, username, password, timeout, keepalive);
+
         // 以/#结尾表示订阅所有以test开头的主题
         mqttPub.subscribe("test/#", 0);
         return mqttPub;

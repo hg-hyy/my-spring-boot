@@ -1,5 +1,7 @@
 package com.hg.hyy.mqtt;
 
+import java.net.ConnectException;
+
 import com.hg.hyy.config.MqttConfig;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -31,7 +33,12 @@ public class PushCallback implements MqttCallback {
         // 连接丢失后，一般在这里面进行重连
         // logger.error("连接断开，可以做重连");
         if (client == null || !client.isConnected()) {
-            mqttConfig.getMqttPub();
+            try {
+                mqttConfig.getMqttPub();
+            } catch (ConnectException e) {
+                // e.printStackTrace();
+                logger.error("mqtt server 连接已断开");
+            }
         }
     }
 
