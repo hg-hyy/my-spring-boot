@@ -53,7 +53,7 @@ import com.hg.hyy.entity.Sb;
 import com.hg.hyy.entity.Topic;
 import com.hg.hyy.entity.User;
 import com.hg.hyy.entity.UserRepository;
-import com.hg.hyy.websocket.WsAnnotation1;
+import com.hg.hyy.websocket.WsAnnotation;
 import com.hg.hyy.grpc.HelloWorldClient;
 import com.hg.hyy.grpc.HelloWorldServer;
 import com.hg.hyy.kafka.KafkaClient;
@@ -485,7 +485,7 @@ public class VueController {
     public String sendMsg() {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         // 模拟向已连接的WebSocket客户端发送系统提醒
-        for (WsAnnotation1 item : WsAnnotation1.webSocketSet) {
+        for (WsAnnotation item : WsAnnotation.webSocketSet) {
             try {
                 item.sendMessage("系统提醒：当前时间，" + sf.format(new Date()) + "，请尽快完成任务!");
             } catch (IOException e) {
@@ -494,7 +494,7 @@ public class VueController {
             }
 
         }
-        return "WsAnnotation1" + sf.format(new Date()) + "，请尽快完成任务!";
+        return "WsAnnotation" + sf.format(new Date()) + "，请尽快完成任务!";
 
     }
 
