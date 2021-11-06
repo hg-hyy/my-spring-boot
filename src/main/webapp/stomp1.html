@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello WebSocket</title>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+        display: flex;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+        height: 100vh;
+      }
+        .ws{
+            margin: auto;
+            width: 100%;
+            max-width: 530px;
+            padding: 15px;
+        }
+        .form-btn{
+            display: flex;
+           justify-content: space-between;
+
+        }
+        form{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="ws border border-dark border-2">
+        <div class="form-btn ">
+          <h1 class="h3">Stomp WebSocket</h1>
+        <button id="connect" class="btn btn-primary"">
+          Connect
+        </button>
+        <button
+          id="disconnect"
+          class="btn btn-danger"
+          disabled="disabled"
+        >
+          Disconnect
+        </button>
+      </div>
+
+      
+        <form class="my-3">
+            <div>
+            <label for="name">What is your name?</label></div>
+            <div>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              placeholder="Your name here..."
+            /></div>
+            <button id="send" class="btn btn-info" type="submit">Send</button>
+        </form>
+      
+      <div>
+          <h1 class="h3">Greetings:</h1>
+          <textarea id="greetings" class="form-control" style="height: 200px;"></textarea>
+      </div>
+      
+    </div>
+    <script>
+      var stompClient = null;
+
+function setConnected(connected) {
+  $("#connect").prop("disabled", connected);
+  $("#disconnect").prop("disabled", !connected);
+  if (connected) {
+    $("#conversation").show();
+  } else {
+    $("#conversation").hide();
+  }
+  $("#greetings").html("");
+}
+
+function connect() {
+  var socket = new SockJS("/stomp.ws");
+  stompClient = Stomp.over(socket);
+  stompClient.connect({}, function (frame) {
+    setConnected(true);
+    console.log("Connected: " + frame);
+    stompClient.subscribe("/topic/greetings", function (greeting) {
+      showGreeting(JSON.parse(greeting.body).content);
+    });
+  });
+}
+
+function disconnect() {
+  if (stompClient !== null) {
+    stompClient.disconnect();
+  }
+  setConnected(false);
+  console.log("Disconnected");
+}
+
+function sendName() {
+  stompClient.send(
+    "/app/hello",
+    {},
+    JSON.stringify({ name: $("#name").val() })
+  );
+}
+
+function showGreeting(message) {
+  $("#greetings").val(message);
+}
+
+$(function () {
+  $("form").on("submit", function (e) {
+    e.preventDefault();
+  });
+  $("#connect").click(function () {
+    connect();
+  });
+  $("#disconnect").click(function () {
+    disconnect();
+  });
+  $("#send").click(function () {
+    sendName();
+  });
+});
+
+    </script>
+  </body>
+</html>

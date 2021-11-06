@@ -33,6 +33,7 @@ public class WsEndpointConfig implements ServerApplicationConfig {
         Set<ServerEndpointConfig> result = new HashSet<ServerEndpointConfig>();
         if (scanned.contains(WsEndpoint.class)) {
             result.add(ServerEndpointConfig.Builder.create(WsEndpoint.class, "/endpoint.ws").build());
+
         }
         return result;
     }

@@ -73,8 +73,11 @@
             log("Info: STOMP connection opened.");
 
             //订阅服务端的/topic/greeting地址
-            stompClient.subscribe("/topic/greeting", function (greeting) {
+            stompClient.subscribe("/topic/greetings", function (greeting) {
               log("Received: " + JSON.parse(greeting.body).content);
+              var text = document.querySelector("#greetings");
+
+              text.value = JSON.parse(greeting.body).content;
             });
           },
           function () {
@@ -101,7 +104,7 @@
           var username = $("#username").val();
           log("Sent: " + username);
           stompClient.send(
-            "/message/hello",
+            "/app/hello",
             {},
             JSON.stringify({ name: username })
           );
@@ -173,6 +176,15 @@
           >
             Say hello
           </button>
+        </div>
+
+        <div>
+          <h1 class="h3">Greetings:</h1>
+          <textarea
+            id="greetings"
+            class="form-control"
+            style="height: 200px"
+          ></textarea>
         </div>
       </div>
     </div>
