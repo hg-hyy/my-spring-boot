@@ -8,9 +8,6 @@ import javax.websocket.server.ServerEndpointConfig;
 
 import com.hg.hyy.websocket.WsEndpoint;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-
 /**
  * WebSocket相关配置基于编程javax.websocket
  *
@@ -19,8 +16,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
  * @since 1.0.0
  */
 
-@Configuration
-@EnableWebSocket
 public class WsEndpointConfig implements ServerApplicationConfig {
 
     @Override

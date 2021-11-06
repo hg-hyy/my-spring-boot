@@ -487,7 +487,7 @@ public class VueController {
         // 模拟向已连接的WebSocket客户端发送系统提醒
         for (WsAnnotation item : WsAnnotation.webSocketSet) {
             try {
-                item.sendMessage("系统提醒：当前时间，" + sf.format(new Date()) + "，请尽快完成任务!");
+                item.sendMessageString("系统提醒：当前时间，" + sf.format(new Date()) + "，请尽快完成任务!");
             } catch (IOException e) {
                 e.printStackTrace();
                 continue;
