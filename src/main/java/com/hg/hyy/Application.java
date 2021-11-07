@@ -1,6 +1,5 @@
 package com.hg.hyy;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
@@ -21,24 +20,26 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @SpringBootApplication
-public class Application extends SpringBootServletInitializer {
-	// 注意，如果您正在构建WAR文件并部署它，则需要WebApplicationInitializer。如果你喜欢运行一个嵌入式Web服务器，那么你根本不需要这个。
+public class Application extends SpringBootServletInitializer {// SpringBootServletInitializer:构建WAR文件并部署，
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-	public static void main(String[] args) {
+	private static SpringApplicationBuilder customizerBuilder(SpringApplicationBuilder builder) {
 		// 关闭logo
-		SpringApplication sa = new SpringApplication(Application.class);
-		sa.setBannerMode(Banner.Mode.OFF);
-		sa.run(args);
-		// SpringApplication.run(Application.class, args);
+		return builder.sources(Application.class).bannerMode(Banner.Mode.OFF);
 	}
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(Application.class);
+		return customizerBuilder(builder);
 	}
 
+	public static void main(String[] args) {
+		// SpringApplication.run(Application.class, args);
+		customizerBuilder(new SpringApplicationBuilder()).run(args);
+	}
+
+	// websocket
 	@Bean
 	public ServerEndpointExporter serverEndpointExporter() {
 		return new ServerEndpointExporter();
@@ -49,19 +50,8 @@ public class Application extends SpringBootServletInitializer {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/spring.ws").allowedOrigins("http://localhost:8090");
-			}
-		};
-	}
-
-	@Bean
-	public WebMvcConfigurer corsConfigurer1() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/v1/**").allowedOrigins("http://localhost:8080").allowedMethods("POST", "GET")
-						.allowedHeaders("header1", "header2", "header3").exposedHeaders("header1", "header2")
-						.allowCredentials(false).maxAge(3600);
+				registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090").allowedMethods("POST", "GET")
+						.allowedHeaders("*").exposedHeaders("*").allowCredentials(true).maxAge(3600);
 			}
 		};
 	}

@@ -1,4 +1,4 @@
-package com.hg.hyy.config.Speech;
+package com.hg.hyy.Speech;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -29,29 +29,31 @@ public class Sample {
 
         // 可选：设置log4j日志输出格式，若不设置，则使用默认配置
         // 也可以直接通过jvm启动参数设置此环境变量
-        System.setProperty("aip.log4j.conf", "src/main/resources/log4j.properties");
+        // System.setProperty("aip.log4j.conf", "src/main/resources/log4j.properties");
 
         // 调用接口
-        JSONObject res = client.asr("test.pcm", "pcm", 16000, null);
+        JSONObject res = client.asr("src/main/resources/result.wav", "pcm", 16000, null);
         System.out.println(res.toString(2));
+        // asr(client);
 
     }
 
-    public void asr(AipSpeech client) {
+    private static void asr(AipSpeech client) {
         // 对本地语音文件进行识别
         String path = "src/main/resources/16k.pcm";
+        String path1 = "src/main/resources/result.wav";
         JSONObject asrRes = client.asr(path, "pcm", 16000, null);
-        System.out.println(asrRes);
+        System.out.println(asrRes.toString(2));
 
         // 对语音二进制数据进行识别
-        byte[] data = readFileByBytes(path);
+        byte[] data = readFileByBytes(path1);
         JSONObject asrRes2 = client.asr(data, "pcm", 16000, null);
-        System.out.println(asrRes2);
+        System.out.println(asrRes2.toString(2));
 
     }
 
     // readFileByBytes仅为获取二进制数据示例
-    public byte[] readFileByBytes(String path) {
+    private static byte[] readFileByBytes(String path) {
 
         BufferedInputStream bis = null;
         try {

@@ -44,6 +44,7 @@ import com.hg.hyy.entity.Student;
 import com.hg.hyy.utils.Filestrem;
 import com.hg.hyy.utils.HmacSHA256;
 import com.hg.hyy.utils.UserSerializationUtil;
+import com.hg.hyy.Speech.Sample;
 import com.hg.hyy.config.PersonConfig;
 import com.hg.hyy.entity.Greeting;
 import com.hg.hyy.entity.Hello;
@@ -520,6 +521,12 @@ public class VueController {
     @GetMapping("/send")
     public void subscription() throws MessagingException, UnsupportedEncodingException {
         SMT.convertAndSend("/topic/greetings", new Hello("hello,stomp"));
+
+    }
+
+    @GetMapping("/aip")
+    public void aip() {
+        Sample.testSpeech();
 
     }
 
