@@ -5,8 +5,9 @@ import java.util.Set;
 import javax.websocket.Endpoint;
 import javax.websocket.server.ServerApplicationConfig;
 import javax.websocket.server.ServerEndpointConfig;
-
 import com.hg.hyy.websocket.WsEndpoint;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * WebSocket相关配置基于编程javax.websocket
@@ -16,6 +17,8 @@ import com.hg.hyy.websocket.WsEndpoint;
  * @since 1.0.0
  */
 
+@EnableAutoConfiguration
+@Configuration
 public class WsEndpointConfig implements ServerApplicationConfig {
 
     @Override
