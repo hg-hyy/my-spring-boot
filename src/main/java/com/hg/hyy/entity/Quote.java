@@ -31,4 +31,5 @@ public class Quote {
   public String toString() {
     return "Quote{" + "type='" + type + '\'' + ", value=" + value + '}';
   }
+
 }

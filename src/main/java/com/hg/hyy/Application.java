@@ -75,7 +75,7 @@ public class Application extends SpringBootServletInitializer {
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
 			Quote quote = restTemplate.getForObject("https://quoters.apps.pcfone.io/api/random", Quote.class);
-			log.error(quote.toString());
+			log.error("应用启动获取资源成功：" + quote.getValue().getQuote());
 		};
 	}
 	// 打印所有spring bean

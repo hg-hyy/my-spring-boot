@@ -105,7 +105,7 @@ public class MqttPub {
             MqttPub.getClient().subscribe(topic, qos);
         } catch (MqttException e) {
             // e.printStackTrace();
-            log.error("mqtt server 连接失败，订阅主题失败。");
+            log.error("mqtt server 订阅主题失败。");
 
         }
     }

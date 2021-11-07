@@ -20,7 +20,10 @@
 
       window.onload = function () {
         if ("WebSocket" in window) {
-          websocket = new WebSocket("ws://" + host + "/spring.ws?userId=1");
+          websocket =
+            window.location.protocol === "http:"
+              ? new WebSocket("ws://" + host + "/spring.ws?userId=1")
+              : new WebSocket("wss://" + host + "/spring.ws?userId=1");
         } else if ("MozWebSocket" in window) {
           websocket = new MozWebSocket("ws://" + host + "/spring.ws?userId=1");
         } else {

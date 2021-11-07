@@ -14,12 +14,12 @@
 	<version>v1</version>
 	<packaging>war</packaging>
 	<name>hyy</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Vue for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-	<!-- json -->
+		<!-- json -->
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
@@ -31,8 +31,12 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.78</version>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160810</version>
+		</dependency>
 
-		<!-- validation -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -69,6 +73,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!-- websocket -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
@@ -78,6 +83,11 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<!-- mqtt -->
 		<dependency>
@@ -153,17 +163,18 @@
 			<artifactId>grpc-stub</artifactId>
 			<version>1.41.0</version>
 		</dependency>
-
+		<!-- 打包排除内嵌tomcat -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-websocket</artifactId>
 			<version>9.0.54</version>
-		</dependency>
+		</dependency> -->
+		<!-- 测试相关 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -188,11 +199,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 		<!-- html框架 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -222,6 +229,13 @@
 			<artifactId>jquery</artifactId>
 			<version>3.1.1-1</version>
 		</dependency>
+		<!-- baidu 语音 -->
+		<dependency>
+			<groupId>com.baidu.aip</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>4.16.2</version>
+		</dependency>
+
 		<!-- 开发模式热重启 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

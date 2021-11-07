@@ -42,8 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // private static final String ENCODED_PASSWORD =
     // "$2a$10$AIUufK8g6EFhBcumRRV2L.AQNz3Bjp7oDQVFiO5JJMBFZQ6x2/R/2";
-    // private final String ENCODED_PASSWORD =
-    // passwordEncoder().encode("secret123");
+    // private final String ENCODED_PASSWORD = passwordEncoder().encode("111111");
 
     // @Override
     // protected void configure(AuthenticationManagerBuilder auth) throws Exception
