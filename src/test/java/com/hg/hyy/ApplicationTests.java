@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
-public class HyyApplicationTests {
+public class ApplicationTests {
 
 	@Test
 	public void contextLoads() {

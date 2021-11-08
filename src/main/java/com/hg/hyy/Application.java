@@ -52,10 +52,10 @@ public class Application extends SpringBootServletInitializer {// SpringBootServ
 	}
 
 	// websocket
-	@Bean
-	public ServerEndpointExporter serverEndpointExporter() {
-		return new ServerEndpointExporter();
-	}
+	// @Bean
+	// public ServerEndpointExporter serverEndpointExporter() {
+	// return new ServerEndpointExporter();
+	// }
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {

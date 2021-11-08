@@ -60,10 +60,11 @@ public class UrlFilter implements Filter {
         if (!StringUtils.equals(myhosts, "127.0.0.1")// 特定ip
                 && !StringUtils.equals(myhosts, "127.0.0.1:8080")// 特定ip和端口
                 && !StringUtils.equals(myhosts, "localhost:8080")) {
-            log.error("访问host非法，已拦截其非法host为:" + myhosts);
+            log.error("访问host非法，已拦截。非法host:" + myhosts);
             PrintWriter writer = response.getWriter();
             response.setCharacterEncoding("utf-8");
             response.setContentType("text/html; charset=utf-8");
+
             writer.print("访问host非法，已拦截");
             writer.close();
             return;

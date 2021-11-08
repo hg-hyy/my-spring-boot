@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 import io.swagger.annotations.Api;
@@ -51,6 +55,7 @@ import com.hg.hyy.entity.Greeting;
 import com.hg.hyy.entity.Hello;
 import com.hg.hyy.entity.HelloMessage;
 import com.hg.hyy.entity.Msg;
+import com.hg.hyy.entity.Quote;
 import com.hg.hyy.entity.Sb;
 import com.hg.hyy.entity.Topic;
 import com.hg.hyy.entity.User;
@@ -137,10 +142,38 @@ public class VueController {
     // well, to enable CORS on all handler methods of this class.
     @GetMapping("/greet")
     public String greet(@RequestParam(value = "name", defaultValue = "World") String name, Model model) {
-        log.error("---");
         Greeting g = new Greeting(counter.incrementAndGet(), String.format(template, name));
         model.addAttribute("g", g);
-        return "greet";
+        return "Greetings from Spring Boot!";
+    }
+
+    @ApiOperation("TestRestTemplate测试")
+    // You can also add the @CrossOrigin annotation at the controller class level as
+    // well, to enable CORS on all handler methods of this class.
+    @GetMapping("/hello-spring")
+    public Greeting greet(@RequestParam(value = "name", defaultValue = "World") String name) {
+        Greeting gt = new Greeting(counter.incrementAndGet(), String.format(template, name));
+        log.error("接收到参数：" + name);
+        return gt;
+    }
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @RequestMapping("/gethello")
+    public String getHello() {
+        ResponseEntity<Quote> responseEntity = restTemplate.getForEntity("https://quoters.apps.pcfone.io/api/random",
+                Quote.class);
+        Quote q = responseEntity.getBody();
+        HttpStatus statusCode = responseEntity.getStatusCode();
+        int statusCodeValue = responseEntity.getStatusCodeValue();
+        HttpHeaders headers = responseEntity.getHeaders();
+        StringBuffer result = new StringBuffer();
+        result.append("responseEntity.getBody()：").append(q).append("<hr>").append("responseEntity.getStatusCode()：")
+                .append(statusCode).append("<hr>").append("responseEntity.getStatusCodeValue()：")
+                .append(statusCodeValue).append("<hr>").append("responseEntity.getHeaders()：").append(headers)
+                .append("<hr>");
+        return result.toString();
     }
 
     @ApiOperation("测试CORS")

@@ -25,9 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/v1", "/home", "/spring.ws", "/stomp.ws", "/annotation.ws", "/annotation1.ws").permitAll()
-                .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll().anyRequest().authenticated()
-                .and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
+                .antMatchers("/v1", "/v1/hello-spring", "/endpoint.ws", "/spring.ws", "/stomp.ws", "/annotation.ws")
+                .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll().anyRequest()
+                .authenticated().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
         http.csrf().disable();
     }
 

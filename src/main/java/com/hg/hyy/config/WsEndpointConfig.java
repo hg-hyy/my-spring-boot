@@ -6,7 +6,6 @@ import javax.websocket.Endpoint;
 import javax.websocket.server.ServerApplicationConfig;
 import javax.websocket.server.ServerEndpointConfig;
 import com.hg.hyy.websocket.WsEndpoint;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -17,13 +16,12 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0.0
  */
 
-@EnableAutoConfiguration
 @Configuration
 public class WsEndpointConfig implements ServerApplicationConfig {
 
     @Override
     public Set<Class<?>> getAnnotatedEndpointClasses(Set<Class<?>> scanned) {
-        return scanned;
+        return null;
     }
 
     @Override
