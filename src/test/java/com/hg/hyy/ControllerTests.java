@@ -53,8 +53,8 @@ public class ControllerTests {
         // url直接传参
         ResponseEntity<Greeting> response = restTemplate.getForEntity("/v1/hello-spring?name=spring", Greeting.class);
         Log.getLog(this).error(response.getBody().toString());
-        assertThat(response.getBody().toString()).isEqualTo("Greeting [content=Hello, spring!, id=2]");
-        assertEquals("Greeting [content=Hello, spring!, id=2]", response.getBody().toString());
+        assertThat(response.getBody().getContent()).isEqualTo("Hello, spring!");
+        assertEquals("Hello, spring!", response.getBody().getContent());
 
     }
 
@@ -70,10 +70,12 @@ public class ControllerTests {
     @Test
     public void corsWithAnnotation() throws Exception {
         ResponseEntity<Greeting> entity = this.restTemplate.exchange(
-                RequestEntity.get(uri("/v1/greeting")).header(HttpHeaders.ORIGIN, "http://localhost:8080").build(),
+                RequestEntity.get(uri("/v1/greeting")).header(HttpHeaders.ORIGIN, "https://localhost:8080").build(),
                 Greeting.class);
+                Log.getLog(this).error("=================",entity.toString());
+
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        assertEquals("http://localhost:8080", entity.getHeaders().getAccessControlAllowOrigin());
+        System.out.println(entity.getHeaders());
         Greeting greeting = entity.getBody();
         assertEquals("Hello, World!", greeting.getContent());
     }
@@ -81,10 +83,10 @@ public class ControllerTests {
     @Test
     public void corsWithJavaconfig() {
         ResponseEntity<Greeting> entity = this.restTemplate.exchange(
-                RequestEntity.get(uri("/v1/greeting1")).header(HttpHeaders.ORIGIN, "http://localhost:8080").build(),
+                RequestEntity.get(uri("/v1/greeting1")).header(HttpHeaders.ORIGIN, "https://localhost:8080").build(),
                 Greeting.class);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        assertEquals("http://localhost:8080", entity.getHeaders().getAccessControlAllowOrigin());
+        assertEquals("https://localhost:8080", entity.getHeaders().getAccessControlAllowOrigin());
         Greeting greeting = entity.getBody();
         assertEquals("Hello, World!", greeting.getContent());
     }

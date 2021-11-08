@@ -37,9 +37,14 @@ public class UrlFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String curOrigin = request.getHeader("Origin");
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", curOrigin == null ? "true" : curOrigin);
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE, PUT");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         String requestStr = getRequestString(request);
         log.error("请求的地址：" + request.getRequestURL().toString());
         log.error("请求的方式：" + request.getMethod());
