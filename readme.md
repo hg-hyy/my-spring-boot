@@ -1,5 +1,6 @@
 ### start
-
+```运行
 .\mvnw spring-boot:run
 
-.\mvnw spring-boot:run -Dserver.port=9000
+```打包
+.\mvnw clean package
