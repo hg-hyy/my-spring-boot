@@ -11,6 +11,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @SpringBootApplication
+@ServletComponentScan
 public class Application extends SpringBootServletInitializer {// SpringBootServletInitializer:构建WAR文件并部署，
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -36,6 +38,16 @@ public class Application extends SpringBootServletInitializer {// SpringBootServ
 
 	public static void main(String[] args) {
 		// SpringApplication.run(Application.class, args);
+
+		// SpringApplication application = new SpringApplication(MyApplication.class);
+		// application.setBannerMode(Banner.Mode.OFF);
+		// application.run(args);
+
+		// new SpringApplicationBuilder()
+		// .bannerMode(Banner.Mode.OFF)
+		// .sources(Application.class)
+		// .run(args);
+
 		customizerBuilder(new SpringApplicationBuilder()).run(args);
 	}
 

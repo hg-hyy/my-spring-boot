@@ -35,8 +35,9 @@ public class GreetingIntegrationTests {
 
     @Test
     public void corsWithJavaconfig() {
-        ResponseEntity<Greeting> entity = this.restTemplate.exchange(RequestEntity.get(uri("/v1/greeting-javaconfig"))
-                .header(HttpHeaders.ORIGIN, "http://localhost:8080").build(), Greeting.class);
+        ResponseEntity<Greeting> entity = this.restTemplate.exchange(
+                RequestEntity.get(uri("/v1/greeting1")).header(HttpHeaders.ORIGIN, "http://localhost:8080").build(),
+                Greeting.class);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
         assertEquals("http://localhost:8080", entity.getHeaders().getAccessControlAllowOrigin());
         Greeting greeting = entity.getBody();

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -111,6 +112,13 @@ public class VueController {
         return "log is log";
     }
 
+    // 可以返回视图，但是不能带参数，如果要返回视图，规范的做法是定义一个controller。
+    @GetMapping("/getuser")
+    public ModelAndView doMenuEditUI() {
+        ModelAndView modelAndView = new ModelAndView("500");
+        return modelAndView;
+    }
+
     @ApiOperation("测试异常")
     @SuppressWarnings("unused")
     @GetMapping("/err")
@@ -160,7 +168,7 @@ public class VueController {
 
     @ApiOperation("测试model传参到html")
     @GetMapping("/admin")
-    public String admin(Model model) {
+    public List<User> admin(Model model) {
         List<User> userList = new ArrayList<>();
         User user = new User("admin", "admin", "管理员");
         User user1 = new User("user", "123456", "访客");
@@ -169,7 +177,7 @@ public class VueController {
         model.addAttribute("users", userList);
         model.addAttribute("user", user);
         model.addAttribute("user1", user1);
-        return "user";
+        return userList;
     }
 
     @ApiOperation("新增用户")
@@ -419,14 +427,14 @@ public class VueController {
         return studentService.getAllStudent();
     }
 
-    @ApiOperation("读取配置文件")
+    @ApiOperation("environment,读取配置文件")
     @RequestMapping("/test")
     @ResponseBody
     public String getTest() {
         return "hello," + environment.getProperty("com.hg.hyy.test");
     }
 
-    @ApiOperation("配置文件")
+    @ApiOperation("Autowired,读取配置文件")
     @GetMapping("/get_app")
     public String contextLoads() {
 
