@@ -1,6 +1,9 @@
-### start
-```运行
-.\mvnw spring-boot:run
+### run
 
-```打包
+```
+
+```
+
+### ``package``
+
 .\mvnw clean package
