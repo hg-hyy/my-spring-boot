@@ -260,6 +260,7 @@ public class VueController {
                 msg.setMsg("you are success login with inner account!");
                 msg.setCode(1000);
                 msg.setData("");
+                log.error("=============efefefefefefefefefefef==================================");
             } else {
                 msg.setMsg("login failed!");
                 msg.setCode(500);
