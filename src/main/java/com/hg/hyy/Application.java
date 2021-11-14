@@ -62,8 +62,7 @@ public class Application extends SpringBootServletInitializer {// SpringBootServ
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090")
-                        .allowedMethods("POST", "GET")
+                registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090").allowedMethods("POST", "GET")
                         .allowedHeaders("*").exposedHeaders("*").allowCredentials(true).maxAge(3600);
             }
         };
@@ -82,18 +81,13 @@ public class Application extends SpringBootServletInitializer {// SpringBootServ
         };
     }
     /*
-     打印所有spring bean
-     @Bean
-     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-     return args -> {
-     System.out.println("Let's inspect the beans provided by Spring Boot:");
-     String[] beanNames = ctx.getBeanDefinitionNames();
-     Arrays.sort(beanNames);
-     for (String beanName : beanNames) {
-     System.out.println(beanName);
-     }
-     };
-     }
-    */
+     * 打印所有spring bean
+     * 
+     * @Bean public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+     * return args -> {
+     * System.out.println("Let's inspect the beans provided by Spring Boot:");
+     * String[] beanNames = ctx.getBeanDefinitionNames(); Arrays.sort(beanNames);
+     * for (String beanName : beanNames) { System.out.println(beanName); } }; }
+     */
 
 }

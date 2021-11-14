@@ -20,6 +20,11 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+    <!-- spring session的依赖 -->
+<dependency>
+    <groupId>org.springframework.session</groupId>
+    <artifactId>spring-session-data-redis</artifactId>
+</dependency>
         <!--IP地址解析城市名依赖-->
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>

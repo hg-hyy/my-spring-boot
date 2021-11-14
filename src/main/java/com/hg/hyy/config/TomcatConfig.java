@@ -1,6 +1,5 @@
 package com.hg.hyy.config;
 
-import org.apache.catalina.Context;
 import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.tomcat.websocket.server.WsSci;
 import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;

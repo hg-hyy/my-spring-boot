@@ -17,11 +17,13 @@ public class ApplicationTests {
 	@Test
 	public void contextLoads() {
 		PasswordEncoder pw = new BCryptPasswordEncoder();
-		String s = pw.encode("111111");
-		System.out.println(s);
+		String s = pw.encode("admin");
+		System.out.println("加密后的密码："+s);
 
-		Boolean ma = pw.matches("111111", s);
-		System.out.println(ma);
+		String s1 = "$2a$10$esprAT85EV7UyC4qRBFGUe0v9W2Q0pi7XEikeMuGOt2DdXYbYZY/G";
+
+		Boolean ma = pw.matches("admin", s1);
+		System.out.println("密码校验结果："+ma);
 
 		UserInfo userInfo = new UserInfo();
 		userInfo.setFemale(true);
