@@ -55,7 +55,6 @@ import com.hg.hyy.entity.Hello;
 import com.hg.hyy.entity.HelloMessage;
 import com.hg.hyy.entity.Msg;
 import com.hg.hyy.entity.Quote;
-import com.hg.hyy.entity.Sb;
 import com.hg.hyy.entity.Topic;
 import com.hg.hyy.entity.User;
 import com.hg.hyy.entity.UserRepository;
@@ -123,6 +122,7 @@ public class VueController {
         return gt;
     }
 
+    @ApiOperation("测试headers")
     @RequestMapping("/gethello")
     public String getHello() {
         ResponseEntity<Quote> responseEntity = restTemplate.getForEntity("https://quoters.apps.pcfone.io/api/random",
@@ -169,7 +169,7 @@ public class VueController {
     }
 
     @ApiOperation("新增用户")
-    @PostMapping(path = "/add") // Map ONLY POST Requests
+    @PostMapping(path = "/add")
     public @ResponseBody String addNewUser(@RequestParam String username, @RequestParam String password,
             @RequestParam String role) {
         // @ResponseBody means the returned String is the response, not a view name
@@ -215,7 +215,6 @@ public class VueController {
                 msg.setMsg("you are success login with inner account!");
                 msg.setCode(1000);
                 msg.setData("");
-                log.error("=============efefefefefefefefefefef==================================");
             } else {
                 msg.setMsg("login failed!");
                 msg.setCode(500);
@@ -229,7 +228,6 @@ public class VueController {
     @PostMapping("/testmap")
     public String signin(@RequestBody Map<String, String> map) {
 
-        System.out.println(map);
         return map.get("username") + map.get("password");
     }
 
@@ -368,18 +366,6 @@ public class VueController {
         return "demo";
     }
 
-    @ApiOperation("88万行代码")
-    @GetMapping("/sb")
-    public String sb() {
-        try {
-            Sb.sb();
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-        return "ok";
-    }
-
     @ApiOperation("添加一名学生") // 为每个handler添加方法功能描述
     @PostMapping("/add_student")
     @ApiImplicitParam(name = "student", value = "所添加的学生", dataTypeClass = Student.class)
@@ -480,7 +466,6 @@ public class VueController {
     }
 
     @ApiOperation("websocket")
-
     @GetMapping("/ws")
     public String sendMsg() {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");

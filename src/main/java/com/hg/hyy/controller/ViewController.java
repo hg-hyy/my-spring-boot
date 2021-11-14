@@ -25,17 +25,15 @@ public class ViewController {
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
-    @GetMapping("/")
-    public String home() {
-        return "v2home";
+    @ApiOperation("wss")
+    @GetMapping("/wss")
+    public String wss() {
+
+        return "wss";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "v2login";
-    }
-
-    @GetMapping("/index")
+    @ApiOperation("测试权限管理")
+    @GetMapping("/role")
     public String index(Model model) {
         Msg msg = new Msg("测试标题", 1000, "额外信息，只对管理员显示");
         model.addAttribute("msg", msg);
