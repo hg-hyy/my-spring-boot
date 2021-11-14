@@ -1,4 +1,4 @@
-package com.hg.hyy.Speech;
+package com.hg.hyy.speech;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -37,7 +37,7 @@ public class Sample {
         // asr(client);
 
     }
-
+    @SuppressWarnings("unused")
     private static void asr(AipSpeech client) {
         // 对本地语音文件进行识别
         String path = "src/main/resources/16k.pcm";

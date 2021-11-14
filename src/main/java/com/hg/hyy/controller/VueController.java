@@ -49,7 +49,6 @@ import com.hg.hyy.entity.Student;
 import com.hg.hyy.utils.Filestrem;
 import com.hg.hyy.utils.HmacSHA256;
 import com.hg.hyy.utils.UserSerializationUtil;
-import com.hg.hyy.Speech.Sample;
 import com.hg.hyy.config.PersonConfig;
 import com.hg.hyy.entity.Greeting;
 import com.hg.hyy.entity.Hello;
@@ -68,6 +67,7 @@ import com.hg.hyy.kafka.KafkaData;
 import com.hg.hyy.kafka.MyProducer;
 import com.hg.hyy.mqtt.MqttPub;
 import com.hg.hyy.service.StudentService;
+import com.hg.hyy.speech.Sample;
 import com.hg.hyy.vo.ResponseVo;
 
 //@RestController，一般是使用在类上的，它表示的意思其实就是结合了@Controller和@ResponseBody两个注解，
@@ -103,48 +103,14 @@ public class VueController {
     @Autowired
     private StudentService studentService;
 
-    @ApiOperation("index")
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
-    @ApiOperation("测试日志")
-    @GetMapping("/log")
-    public String log() {
-
-        log.error("我是一条error日志");
-        return "log is log";
-    }
+    @Autowired
+    private RestTemplate restTemplate;
 
     // 可以返回视图，但是不能带参数，如果要返回视图，规范的做法是定义一个controller。
     @GetMapping("/getuser")
     public ModelAndView doMenuEditUI() {
         ModelAndView modelAndView = new ModelAndView("500");
         return modelAndView;
-    }
-
-    @ApiOperation("测试异常")
-    @SuppressWarnings("unused")
-    @GetMapping("/err")
-    public String err() {
-
-        try {
-            int a = 1 / 0;
-        } catch (Exception e) {
-            log.error("算术异常", e);
-        }
-        return "err";
-    }
-
-    @ApiOperation("测试 get传参 model传参到html")
-    // You can also add the @CrossOrigin annotation at the controller class level as
-    // well, to enable CORS on all handler methods of this class.
-    @GetMapping("/greet")
-    public String greet(@RequestParam(value = "name", defaultValue = "World") String name, Model model) {
-        Greeting g = new Greeting(counter.incrementAndGet(), String.format(template, name));
-        model.addAttribute("g", g);
-        return "Greetings from Spring Boot!";
     }
 
     @ApiOperation("TestRestTemplate测试")
@@ -156,9 +122,6 @@ public class VueController {
         log.error("接收到参数：" + name);
         return gt;
     }
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     @RequestMapping("/gethello")
     public String getHello() {
@@ -189,14 +152,6 @@ public class VueController {
     public Greeting greetingWithJavaconfig(@RequestParam(required = false, defaultValue = "World") String name) {
         log.error("==== in greeting ====");
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
-    }
-
-    @ApiOperation("500")
-    @SuppressWarnings("unused")
-    @GetMapping("/test500")
-    public String test500() {
-        int i = 1 / 0;// 服务器内部运行异常 跳转500页面
-        return "500";
     }
 
     @ApiOperation("测试model传参到html")
@@ -524,6 +479,8 @@ public class VueController {
         return reqUrl;
     }
 
+    @ApiOperation("websocket")
+
     @GetMapping("/ws")
     public String sendMsg() {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
@@ -560,12 +517,14 @@ public class VueController {
         return new Hello("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 
+    @ApiOperation("stomp websocket")
     @GetMapping("/send")
     public void subscription() throws MessagingException, UnsupportedEncodingException {
         SMT.convertAndSend("/topic/greetings", new Hello("hello,stomp"));
 
     }
 
+    @ApiOperation("baidu aip")
     @GetMapping("/aip")
     public void aip() {
         Sample.testSpeech();
