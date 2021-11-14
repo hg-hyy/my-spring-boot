@@ -49,6 +49,7 @@ public class ViewController {
     public String greet(@RequestParam(value = "name", defaultValue = "World") String name, Model model) {
         Greeting g = new Greeting(counter.incrementAndGet(), String.format(template, name));
         model.addAttribute("g", g);
+        log.error("hello this is test");
         return "greet";
     }
 
