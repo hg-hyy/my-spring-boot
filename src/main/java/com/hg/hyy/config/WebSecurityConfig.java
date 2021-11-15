@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * spring-Security相关配置
  *
- * @author hyy
- * @date 2021-11-05
  * @since 1.0.0
  */
 @Configuration
@@ -46,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v1", "/v2/*", "/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/endpoint.ws",
                         "/spring.ws", "/stomp.ws", "/annotation.ws")
                 .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll().anyRequest()
-                .authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/index").permitAll().and()
+                .authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/role").permitAll().and()
                 .logout().permitAll();
         http.csrf().disable();
     }
@@ -62,13 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // return new InMemoryUserDetailsManager(user);
     // }
 
-    /**
-     * @Author: Galen
-     * @Description: 配置放行的资源
-     * @Date: 2019/3/28-9:23
-     * @Param: [web]
-     * @return: void
-     **/
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/index.html", "/static/**", "/login_p", "/favicon.ico")
