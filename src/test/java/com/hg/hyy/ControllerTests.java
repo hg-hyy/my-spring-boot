@@ -42,11 +42,13 @@ public class ControllerTests {
     public void getHello() throws Exception {
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString("http://localhost:8080/v1/hello-spring?name={name}").build().expand("王五").encode();
+        @SuppressWarnings("unused")
         URI uri = uriComponents.toUri();
 
         Map<String, String> map = new HashMap<String, String>();
         map.put("name", "hello spring");
         // 通过map传参
+        @SuppressWarnings("unused")
         ResponseEntity<String> responseEntity = restTemplate
                 .getForEntity("https://localhost:8080/v1/hello-spring?name={name}", String.class, map);
 
@@ -72,7 +74,7 @@ public class ControllerTests {
         ResponseEntity<Greeting> entity = this.restTemplate.exchange(
                 RequestEntity.get(uri("/v1/greeting")).header(HttpHeaders.ORIGIN, "https://localhost:8080").build(),
                 Greeting.class);
-                Log.getLog(this).error("=================",entity.toString());
+        Log.getLog(this).error("=================", entity.toString());
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
         System.out.println(entity.getHeaders());
