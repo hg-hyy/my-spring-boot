@@ -270,7 +270,6 @@ public class VueController {
     }
 
     // 可以指定某个位置是a-z、A-Z或是0-9
-    @SuppressWarnings("unused")
     public static String getRandomString2(int length) {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
