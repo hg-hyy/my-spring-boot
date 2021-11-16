@@ -1,9 +1,6 @@
 package com.hg.hyy;
 
-import java.util.HashMap;
-
 import com.hg.hyy.entity.UserInfo;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -11,27 +8,31 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@SpringBootTest
+import java.util.HashMap;
+
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationTests {
 
 	@Test
 	public void contextLoads() {
 		PasswordEncoder pw = new BCryptPasswordEncoder();
 		String s = pw.encode("admin");
-		System.out.println("加密后的密码："+s);
+		System.out.println("加密后的密码：" + s);
 
 		String s1 = "$2a$10$esprAT85EV7UyC4qRBFGUe0v9W2Q0pi7XEikeMuGOt2DdXYbYZY/G";
 
-		Boolean ma = pw.matches("admin", s1);
-		System.out.println("密码校验结果："+ma);
+		boolean ma = pw.matches("admin", s1);
+		System.out.println("密码校验结果：" + ma);
 
 		UserInfo userInfo = new UserInfo();
 		userInfo.setFemale(true);
-		userInfo.setHobbies(new String[] { "yoga", "swimming" });
+		userInfo.setHobbies(new String[]{"yoga", "swimming"});
 		userInfo.setDiscount(9.5);
 		userInfo.setAge(26);
 		userInfo.setFeatures(new HashMap<String, Integer>() {
 			private static final long serialVersionUID = 1L;
+
 			{
 				put("height", 175);
 				put("weight", 70);

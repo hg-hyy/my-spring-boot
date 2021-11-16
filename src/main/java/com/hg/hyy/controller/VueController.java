@@ -1,64 +1,7 @@
 package com.hg.hyy.controller;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.MessagingException;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.HtmlUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import io.swagger.annotations.ApiImplicitParams;
-
-import com.hg.hyy.entity.Student;
-import com.hg.hyy.utils.Filestrem;
-import com.hg.hyy.utils.HmacSHA256;
-import com.hg.hyy.utils.UserSerializationUtil;
 import com.hg.hyy.config.PersonConfig;
-import com.hg.hyy.entity.Greeting;
-import com.hg.hyy.entity.Hello;
-import com.hg.hyy.entity.HelloMessage;
-import com.hg.hyy.entity.Msg;
-import com.hg.hyy.entity.Quote;
-import com.hg.hyy.entity.Topic;
-import com.hg.hyy.entity.User;
-import com.hg.hyy.entity.UserRepository;
-import com.hg.hyy.websocket.WsAnnotation;
+import com.hg.hyy.entity.*;
 import com.hg.hyy.grpc.HelloWorldClient;
 import com.hg.hyy.grpc.HelloWorldServer;
 import com.hg.hyy.kafka.KafkaClient;
@@ -67,7 +10,45 @@ import com.hg.hyy.kafka.MyProducer;
 import com.hg.hyy.mqtt.MqttPub;
 import com.hg.hyy.service.StudentService;
 import com.hg.hyy.speech.Sample;
+import com.hg.hyy.utils.Filestrem;
+import com.hg.hyy.utils.HmacSHA256;
+import com.hg.hyy.utils.UserSerializationUtil;
 import com.hg.hyy.vo.ResponseVo;
+import com.hg.hyy.websocket.WsAnnotation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 //@RestController，一般是使用在类上的，它表示的意思其实就是结合了@Controller和@ResponseBody两个注解，
 @Api(tags = "vue")
@@ -75,41 +56,76 @@ import com.hg.hyy.vo.ResponseVo;
 @RequestMapping("/v1")
 public class VueController {
 
-    private String account = "admin";
-    private String pwd = "111111";
-
-    private String servers = "localhost:9092";
-    private String topic = "java_kafka_topic";
+    private final String servers = "localhost:9092";
+    private final String topic = "java_kafka_topic";
 
     private static final Logger log = LoggerFactory.getLogger(VueController.class);
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
 
+
     // This means to get the bean called userRepository Which is auto-generated by
     // Spring, we will use it to handle the data
-    @Autowired
-    private Environment environment;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
+    private StudentRepository studentRepository;
+    private CustomerRepository customerRepository;
     private MqttPub mqttPub;
-
-    @Autowired
     private PersonConfig personConfig;
-
-    @Autowired
     private StudentService studentService;
+    private RestTemplate restTemplate;
+    private Environment environment;
+    private SimpMessagingTemplate SMT;
+    
+    @Autowired
+    public void setSMT(SimpMessagingTemplate SMT) {
+        this.SMT = SMT;
+    }
 
     @Autowired
-    private RestTemplate restTemplate;
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setStudentRepository(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+    @Autowired
+    public void setRepository(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    @Autowired
+    public void setMqttPub(MqttPub mqttPub) {
+        this.mqttPub = mqttPub;
+    }
+
+    @Autowired
+    public void setPersonConfig(PersonConfig personConfig) {
+        this.personConfig = personConfig;
+    }
+
+    @Autowired
+    public void setStudentService(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+    @Autowired
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
 
     // 可以返回视图，但是不能带参数，如果要返回视图，规范的做法是定义一个controller。
-    @GetMapping("/getuser")
+    @GetMapping("/getUser")
     public ModelAndView doMenuEditUI() {
-        ModelAndView modelAndView = new ModelAndView("500");
-        return modelAndView;
+        return new ModelAndView("500");
     }
 
     @ApiOperation("TestRestTemplate测试")
@@ -123,7 +139,7 @@ public class VueController {
     }
 
     @ApiOperation("测试headers")
-    @RequestMapping("/gethello")
+    @RequestMapping("/getHello")
     public String getHello() {
         ResponseEntity<Quote> responseEntity = restTemplate.getForEntity("https://quoters.apps.pcfone.io/api/random",
                 Quote.class);
@@ -149,7 +165,7 @@ public class VueController {
 
     @ApiOperation("测试CORS,全局config")
     @GetMapping("/greeting1")
-    public Greeting greetingWithJavaconfig(@RequestParam(required = false, defaultValue = "World") String name) {
+    public Greeting greetingWithJavaConfig(@RequestParam(required = false, defaultValue = "World") String name) {
         log.error("==== in greeting ====");
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
@@ -170,8 +186,9 @@ public class VueController {
 
     @ApiOperation("新增用户")
     @PostMapping(path = "/add")
-    public @ResponseBody String addNewUser(@RequestParam String username, @RequestParam String password,
-            @RequestParam String role) {
+    public @ResponseBody
+    String addNewUser(@RequestParam String username, @RequestParam String password,
+                      @RequestParam String role) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
@@ -185,20 +202,21 @@ public class VueController {
 
     @ApiOperation("获取所有用户")
     @GetMapping(path = "/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    public @ResponseBody
+    Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
 
     @ApiOperation("登录")
-    @PostMapping("/signin")
-    public Msg signin(@RequestBody User user) throws IOException {
+    @PostMapping("/signIn")
+    public Msg signIn(@RequestBody User user) throws IOException {
         Filestrem fs = new Filestrem();
         // fs.bis_bos();
         fs.br_bw();
         fs.record(user);
 
-        ArrayList<String> al = new ArrayList<String>();
+        ArrayList<String> al = new ArrayList<>();
         al.add(user.getUsername());
         al.add(user.getPassword());
         al.add(user.getRole());
@@ -207,6 +225,8 @@ public class VueController {
 
         Msg msg = new Msg("", 0, "");
         for (User us : userRepository.findAll()) {
+            String account = "admin";
+            String pwd = "111111";
             if (us.getUsername().equals(user.getUsername()) && us.getPassword().equals(user.getPassword())) {
                 msg.setMsg("you are success login!");
                 msg.setCode(1000);
@@ -225,15 +245,15 @@ public class VueController {
     }
 
     @ApiOperation("测试map传参到html")
-    @PostMapping("/testmap")
-    public String signin(@RequestBody Map<String, String> map) {
+    @PostMapping("/testMap")
+    public String testMap(@RequestBody Map<String, String> map) {
 
         return map.get("username") + map.get("password");
     }
 
     @ApiOperation("测试get传参")
     @GetMapping("/topic")
-    public Topic getdata(@RequestParam(value = "topic", defaultValue = "fhh", required = true) String topic) {
+    public Topic getData(@RequestParam(value = "topic", defaultValue = "fhh") String topic) {
         Topic t = new Topic();
         t.setContent(String.format("fhh do i with %s", topic));
         log.error("topic is log");
@@ -245,7 +265,7 @@ public class VueController {
         // String filename=RandomStringUtils.randomAlphanumeric(10);
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int number = random.nextInt(62);
             sb.append(str.charAt(number));
@@ -254,24 +274,23 @@ public class VueController {
     }
 
     // 可以指定某个位置是a-z、A-Z或是0-9
+    @SuppressWarnings("unused")
     public static String getRandomString2(int length) {
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int number = random.nextInt(3);
-            long result = 0;
+            long result;
             switch (number) {
-            case 0:
-                result = Math.round(Math.random() * 25 + 65);
-                sb.append(String.valueOf((char) result));
-                break;
-            case 1:
-                result = Math.round(Math.random() * 25 + 97);
-                sb.append(String.valueOf((char) result));
-                break;
-            case 2:
-                sb.append(String.valueOf(new Random().nextInt(10)));
-                break;
+                case 0 -> {
+                    result = Math.round(Math.random() * 25 + 65);
+                    sb.append((char) result);
+                }
+                case 1 -> {
+                    result = Math.round(Math.random() * 25 + 97);
+                    sb.append((char) result);
+                }
+                case 2 -> sb.append(new Random().nextInt(10));
             }
 
         }
@@ -279,14 +298,14 @@ public class VueController {
     }
 
     @ApiOperation("kafka producer")
-    @GetMapping("/sendkafka")
-    public String sendkafka() {
+    @GetMapping("/sendKafka")
+    public String sendKafka() {
 
         String message = getRandomString(10);
 
         KafkaData data = new KafkaData(0);
         List<Map<String, String>> listMap = new ArrayList<>();
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("keyTest", "hello kafka this is java");
         listMap.add(map);
         data.setListMap(listMap);
@@ -294,17 +313,16 @@ public class VueController {
         KafkaProducer<String, Object> producer = KafkaClient.createProducer(servers);
         KafkaClient.send(producer, topic, data);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("topic:" + topic + " message:" + data + message);
+        String sb = "topic:" + topic + " message:" + data + message;
         MyProducer mp = new MyProducer();
         mp.send();
-        return sb.toString();
+        return sb;
 
     }
 
     @ApiOperation("kafka consumer")
-    @GetMapping("/readkafka")
-    public Object readkafka() {
+    @GetMapping("/readKafka")
+    public Object readKafka() {
 
         KafkaConsumer<String, Object> consumer = KafkaClient.createConsumer(servers, topic);
         Object sb = KafkaClient.readMessage(consumer, Duration.ofSeconds(1));
@@ -319,7 +337,7 @@ public class VueController {
     @GetMapping("/proto")
     public String demo() {
         User user = new User();
-        user.setUsername("xpleaf");
+        user.setUsername("leaf");
         user.setPassword("111111");
         System.out.println("序列化前：" + user);
         // 使用UserSerializationUtil将user对象序列化
@@ -340,14 +358,11 @@ public class VueController {
     }
 
     @ApiOperation("grpc server")
-    @GetMapping("/grpcs")
-    public String grpcs() {
+    @GetMapping("/grpc_s")
+    public String grpcS() {
         try {
             HelloWorldServer.grpcS();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
 
             e.printStackTrace();
         }
@@ -355,8 +370,8 @@ public class VueController {
     }
 
     @ApiOperation("grpc client")
-    @GetMapping("/grpcc")
-    public String grpcc() {
+    @GetMapping("/grpc_c")
+    public String grpcC() {
         try {
             HelloWorldClient.grpcC();
         } catch (Exception e) {
@@ -382,10 +397,10 @@ public class VueController {
 
     @ApiOperation("修改一名学生")
     @PutMapping("/update_student")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "studentId", value = "学号", required = true), // required为是否必填项
-            @ApiImplicitParam(name = "studentName", value = "学生姓名", required = false),
-            @ApiImplicitParam(name = "studentSex", value = "学生性别", required = false),
-            @ApiImplicitParam(name = "studentScore", value = "学生分数", required = false) })
+    @ApiImplicitParams({@ApiImplicitParam(name = "studentId", value = "学号", required = true), // required为是否必填项
+            @ApiImplicitParam(name = "studentName", value = "学生姓名"),
+            @ApiImplicitParam(name = "studentSex", value = "学生性别"),
+            @ApiImplicitParam(name = "studentScore", value = "学生分数")})
     public ResponseVo<Integer> updateOneStudent(Student student) {
         return studentService.updateOneStudent(student);
     }
@@ -419,19 +434,19 @@ public class VueController {
         return "image:" + JSONObject.fromObject(person).toString() + "list:" + JSONArray.fromObject(list).toString();
     }
 
-    @ApiOperation("vigap_api")
-    @GetMapping("/vigap")
-    public String vigap() throws UnsupportedEncodingException {
+    @ApiOperation("vi_gap_api")
+    @GetMapping("/vi_gap")
+    public String viGap() {
         String key = "igzldvp-zaz3rpr-8xrdnlp-mpwr9";
 
         LocalDateTime ldt = LocalDateTime.now(); // 当前日期和时间
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         String localTime = df.format(ldt);
 
-        Map<String, String> m = new HashMap<String, String>();
+        Map<String, String> m = new HashMap<>();
 
-        List<String> l = new ArrayList<String>();
-        TreeSet<String> t = new TreeSet<String>();
+        List<String> l = new ArrayList<>();
+        TreeSet<String> t = new TreeSet<>();
         String method = "GET";
         String ip = "192.168.20.33";
         String api = "/api/v1/systems/dashboard";
@@ -446,7 +461,7 @@ public class VueController {
         m.put("Timestamp", localTime);
 
         for (Map.Entry<String, String> entry : m.entrySet()) {
-            t.add(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "utf-8"));
+            t.add(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
         }
 
         String param = String.join("&", t);
@@ -455,14 +470,12 @@ public class VueController {
         String message = url + "\\n" + param + "\\n";
 
         String reqs = HmacSHA256.sha256_mac(message, key);
-        String rust = Base64.getEncoder().encodeToString(reqs.toUpperCase().getBytes("utf-8")).toString();
-        String Signature = URLEncoder.encode(rust, "utf-8");
+        String rust = Base64.getEncoder().encodeToString(reqs.toUpperCase().getBytes(StandardCharsets.UTF_8));
+        String Signature = URLEncoder.encode(rust, StandardCharsets.UTF_8);
 
         String host = "https://192.168.20.33:10000";
 
-        String reqUrl = host + api + "?" + param + "&" + "Signature=" + Signature;
-
-        return reqUrl;
+        return host + api + "?" + param + "&" + "Signature=" + Signature;
     }
 
     @ApiOperation("websocket")
@@ -475,7 +488,7 @@ public class VueController {
                 item.sendMessageString("系统提醒：当前时间，" + sf.format(new Date()) + "，请尽快完成任务!");
             } catch (IOException e) {
                 e.printStackTrace();
-                continue;
+
             }
 
         }
@@ -490,21 +503,18 @@ public class VueController {
         return new Hello("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 
-    @Autowired
-    SimpMessagingTemplate SMT;
 
     @GetMapping("/hello")
     @SendTo("/topic/greetings")
     public Hello hello1(HelloMessage message) throws Exception {
         Thread.sleep(1000); // simulated delay
-        // SMT.convertAndSend("/topic/greetings", new Greeting("Hello, " +
-        // HtmlUtils.htmlEscape(message.getName()) + "!"));
+        // SMT.convertAndSend("/topic/greetings", new Greeting("Hello, " +HtmlUtils.htmlEscape(message.getName()) + "!"));
         return new Hello("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 
     @ApiOperation("stomp websocket")
     @GetMapping("/send")
-    public void subscription() throws MessagingException, UnsupportedEncodingException {
+    public void subscription() throws MessagingException {
         SMT.convertAndSend("/topic/greetings", new Hello("hello,stomp"));
 
     }
@@ -514,6 +524,35 @@ public class VueController {
     public void aip() {
         Sample.testSpeech();
 
+    }
+
+    @ApiOperation("jpa")
+    @GetMapping("/jpa")
+    public void getStudents() {
+//        customerRepository.save(new Customer("Jack", "Bauer"));
+//        customerRepository.save(new Customer("Chloe", "O'Brian"));
+//        customerRepository.save(new Customer("Kim", "Bauer"));
+
+        // fetch all customers
+        log.error("Customers found with findAll():");
+        for (Customer customer : customerRepository.findAll()) {
+            log.error(customer.toString());
+        }
+
+        // fetch an individual customer by ID
+        Customer customer = customerRepository.findById(1);
+        log.error("Customer found with findById");
+        log.error(customer.toString());
+
+        // fetch customers by last name
+        log.error("Customer found with findByLastName('Bauer'):");
+        customerRepository.findByLastName("Bauer").forEach(bauer -> log.error(bauer.toString()));
+
+//        Student s1 = new Student();
+//        s1.setStudentName("fhh");
+//        s1.setStudentScore(69.0);
+//        studentRepository.save(s1);
+        studentRepository.findAll().forEach(s -> log.error(s.toString()));
     }
 
 }
