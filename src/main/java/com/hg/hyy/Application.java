@@ -1,5 +1,7 @@
 package com.hg.hyy;
 
+import java.io.IOException;
+
 import com.hg.hyy.entity.Quote;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -43,7 +45,12 @@ public class Application extends SpringBootServletInitializer {// SpringBootServ
         // .bannerMode(Banner.Mode.OFF)
         // .sources(Application.class)
         // .run(args);
-
+        try {
+            Runtime.getRuntime().exec("src\\main\\resources\\mysqld.bat");
+            log.error("mysql start sucess");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         customizerBuilder(new SpringApplicationBuilder()).run(args);
     }
 

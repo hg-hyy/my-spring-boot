@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/v1", "/v2/*", "/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/endpoint.ws",
-                        "/spring.ws", "/stomp.ws", "/annotation.ws")
+                        "/spring.ws", "/stomp.ws", "/annotation.ws", "/*")
                 .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll().anyRequest()
                 .authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/role").permitAll().and()
                 .logout().permitAll();
@@ -60,25 +60,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // return new InMemoryUserDetailsManager(user);
     // }
 
-
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/index.html", "/static/**", "/login_p", "/favicon.ico")
+        web.ignoring().antMatchers("/index.html", "/static/**", "/favicon.ico")
                 // 给 swagger 放行；不需要权限能访问的资源
-                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/images/**", "/webjars/**", "/v2/api-docs",
-                        "/configuration/ui", "/configuration/security");
+                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
     }
-
-    // private static final String ENCODED_PASSWORD =
-    // "$2a$10$AIUufK8g6EFhBcumRRV2L.AQNz3Bjp7oDQVFiO5JJMBFZQ6x2/R/2";
-    // private final String ENCODED_PASSWORD = passwordEncoder().encode("111111");
-
-    // @Override
-    // protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    // {
-    // auth.inMemoryAuthentication().passwordEncoder(passwordEncoder()).withUser("user").password(ENCODED_PASSWORD)
-    // .roles("USER");
-    // }
 
     // 加密方式
     @Bean
