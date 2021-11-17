@@ -1,4 +1,4 @@
-package com.hg.hyy.Scheduling;
+package com.hg.hyy.scheduling;
 
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
