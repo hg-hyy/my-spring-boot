@@ -37,6 +37,7 @@ public class Sample {
         // asr(client);
 
     }
+
     @SuppressWarnings("unused")
     private static void asr(AipSpeech client) {
         // 对本地语音文件进行识别
