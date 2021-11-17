@@ -51,14 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/spring.ws", "/stomp.ws",
                         "/annotation.ws", "/*")
-                .permitAll().antMatchers("/v2/role").access("hasRole('ADMIN')")
-                // 在mySecurityUserDetails中添加角色时需要添加上ROLE_前缀
-                .regexMatchers("/main1.html").hasRole("ADMIN")
-                // 登录成功之后具有某一个权限才能访问该页面（字母严格区分大小写）
-                .regexMatchers("/main1.html").hasAuthority("admin")
-                .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll().anyRequest()
-                .access("@myAccessImpl.hasPermit(request,authentication)").anyRequest()
-                .access("@myAccessServiceImpl.myUri(request,authentication)")
+                .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll()
+                .antMatchers("/v2/role", "/v2/wss").access("hasRole('USER')").antMatchers("/v2/greet")
+                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                // .and().rememberMe().tokenRepository( persistentTokenRepository() )
+                .anyRequest().access("@myAccessImpl.hasPermit(request,authentication)")
                 // .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/role").permitAll().and().logout()
                 .permitAll();
@@ -67,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 统一的403页面
         http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
+        http.exceptionHandling().accessDeniedPage("/unauth.html");
 
         // http.authorizeHttpRequests(authorize ->
         // authorize.mvcMatchers("/resources/**", "/signup", "/about").permitAll()

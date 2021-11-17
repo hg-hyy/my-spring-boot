@@ -50,7 +50,7 @@ public class UrlFilter implements Filter {
         log.error("请求的方式：" + request.getMethod());
 
         IpInfo ipInfo = getIp(request); // 获取用户IP信息
-        log.error("请求的IP地址：" + ipInfo.getIp() + ",请求的浏览器：" + ipInfo.getUA());
+        log.info("请求的IP地址：" + ipInfo.getIp() + ",请求的浏览器：" + ipInfo.getUA());
         if ("bingo".equals(urlFilter2(requestStr)) || "bingo".equals(urlFilter2(request.getRequestURL().toString()))) {
             log.error("访问地址发现非法字符，已拦截非法地址：" + request.getRequestURL().toString());
             PrintWriter writer = response.getWriter();

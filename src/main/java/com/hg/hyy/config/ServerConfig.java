@@ -21,19 +21,3 @@ public class ServerConfig implements ApplicationListener<WebServerInitializedEve
         log.error("Get WebServer port {}", serverPort);
     }
 }
-
-//// for 1.5.x Spring Boot
-// public class ServerConfig implements
-//// ApplicationListener<EmbeddedServletContainerInitializedEvent> {
-// private int serverPort;;
-//
-// public int getPort() {
-// return this.serverPort;
-// }
-//
-// @Override
-// public void onApplicationEvent(EmbeddedServletContainerInitializedEvent
-//// event) {
-// this.serverPort = event.getEmbeddedServletContainer().getPort();
-// }
-// }

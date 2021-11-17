@@ -7,6 +7,7 @@ import com.hg.hyy.model.SysRole;
 import com.hg.hyy.model.SysUser;
 import com.hg.hyy.model.SysUserRole;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,6 +54,9 @@ public class SysUserDetailService implements UserDetailsService {
             SysRole role = sysRoleMapper.selectById(userRole.getRoleId());
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
+
+        // List<GrantedAuthority> auths =
+        // AuthorityUtils.commaSeparatedStringToAuthorityList("admins,ROLE_sale");
 
         // 返回UserDetails实现类
         return new User(user.getName(), user.getPassword(), authorities);

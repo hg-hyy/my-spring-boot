@@ -7,4 +7,3 @@ import javax.servlet.http.HttpServletRequest;
 public interface MyAccess {
     boolean hasPermit(HttpServletRequest request, Authentication authentication);
 }
-

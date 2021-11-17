@@ -47,7 +47,7 @@ public class IpAddressService {
             CityResponse response = reader.city(InetAddress.getByName(ipAddress));
             return response.getMostSpecificSubdivision().getNames().get("zh-CN");
         } catch (Exception e) {
-            logger.error("根据IP[{}]获取省份失败:{}", ipAddress, e.getMessage());
+            logger.info("根据IP[{}]获取省份失败:{}", ipAddress, e.getMessage());
             return null;
         }
     }
@@ -58,7 +58,7 @@ public class IpAddressService {
             CityResponse response = reader.city(InetAddress.getByName(ipAddress));
             return response.getCity().getNames().get("zh-CN");
         } catch (Exception e) {
-            logger.error("根据IP[{}]获取市級失败:{}", ipAddress, e.getMessage());
+            logger.info("根据IP[{}]获取市級失败:{}", ipAddress, e.getMessage());
             return null;
         }
     }

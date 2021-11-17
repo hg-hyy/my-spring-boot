@@ -23,3 +23,10 @@ create table SYS_USER_ROLE
     constraint fk_1 foreign key (ROLE_ID) references SYS_ROLE (ID) on update cascade on delete cascade,
     constraint fk_2 foreign key (USER_ID) references SYS_USER (ID) on update cascade on delete cascade
 );
+
+CREATE TABLE persistent_logins (
+	`username` VARCHAR(64) NOT NULL,
+	`series` VARCHAR(64) PRIMARY KEY,
+	`token` VARCHAR(64) NOT NULL,
+	`last_used` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)ENGINE=INNODB DEFAULT CHARSET=utf8;
