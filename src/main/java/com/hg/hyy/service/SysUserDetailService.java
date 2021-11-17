@@ -27,6 +27,7 @@ public class SysUserDetailService implements UserDetailsService {
     private final SysUserMapper sysUserMapper;
     private final SysRoleMapper sysRoleMapper;
     private final SysUserRoleMapper sysUserRoleMapper;
+    private final Collection<GrantedAuthority> authorities = new ArrayList<>();
 
     public SysUserDetailService(SysUserMapper sysUserMapper, SysRoleMapper sysRoleMapper,
             SysUserRoleMapper sysUserRoleMapper) {
@@ -38,7 +39,6 @@ public class SysUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
         // 从数据库中取出用户信息
         SysUser user = sysUserMapper.selectByName(username);
 
@@ -57,5 +57,9 @@ public class SysUserDetailService implements UserDetailsService {
         // 返回UserDetails实现类
         return new User(user.getName(), user.getPassword(), authorities);
 
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 }

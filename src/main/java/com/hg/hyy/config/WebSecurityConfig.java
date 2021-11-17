@@ -1,6 +1,7 @@
 package com.hg.hyy.config;
 
 import com.hg.hyy.service.SysUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
  * spring-Security相关配置
@@ -20,6 +22,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SysUserDetailService sysUserDetailService;
+    private AccessDeniedHandler myAccessDeniedHandler;
+
+    @Autowired
+    public void setMyAccessDeniedHandler(AccessDeniedHandler myAccessDeniedHandler) {
+        this.myAccessDeniedHandler = myAccessDeniedHandler;
+    }
 
     public WebSecurityConfig(SysUserDetailService sysUserDetailService) {
         this.sysUserDetailService = sysUserDetailService;
@@ -41,24 +49,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/v1", "/v2/*", "/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/endpoint.ws",
-                        "/spring.ws", "/stomp.ws", "/annotation.ws", "/*")
-                .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll().anyRequest()
-                .authenticated().and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/role").permitAll().and()
-                .logout().permitAll();
+                .antMatchers("/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/spring.ws", "/stomp.ws",
+                        "/annotation.ws", "/*")
+                .permitAll().antMatchers("/v2/role").access("hasRole('ADMIN')")
+                // 在mySecurityUserDetails中添加角色时需要添加上ROLE_前缀
+                .regexMatchers("/main1.html").hasRole("ADMIN")
+                // 登录成功之后具有某一个权限才能访问该页面（字母严格区分大小写）
+                .regexMatchers("/main1.html").hasAuthority("admin")
+                .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll().anyRequest()
+                .access("@myAccessImpl.hasPermit(request,authentication)").anyRequest()
+                .access("@myAccessServiceImpl.myUri(request,authentication)")
+                // .anyRequest().authenticated()
+                .and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/role").permitAll().and().logout()
+                .permitAll();
+
         http.csrf().disable();
+
+        // 统一的403页面
+        http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
+
+        // http.authorizeHttpRequests(authorize ->
+        // authorize.mvcMatchers("/resources/**", "/signup", "/about").permitAll()
+        // .mvcMatchers("/admin/**").hasRole("ADMIN").mvcMatchers("/db/**")
+        // .access("hasRole('ADMIN') and hasRole('DBA')").anyRequest().denyAll());
     }
-
-    // 仅限demo使用，已经废弃。
-    // @Bean
-    // @Override
-    // public UserDetailsService userDetailsService() {
-
-    // UserDetails user =
-    // User.withDefaultPasswordEncoder().username("admin").password("111111").roles("USER").build();
-
-    // return new InMemoryUserDetailsManager(user);
-    // }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
