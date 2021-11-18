@@ -1,4 +1,4 @@
-package com.hg.hyy.Interceptors;
+package com.hg.hyy.interceptors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

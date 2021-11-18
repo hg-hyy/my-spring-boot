@@ -1,4 +1,4 @@
-package com.hg.hyy.Interceptors;
+package com.hg.hyy.interceptors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
