@@ -13,7 +13,7 @@ public class CustomHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        log.error("preHandle:请求前调用");
+        log.error("用户正在请求/v2/role");
         // 返回 false 则请求中断
         return true;
     }
@@ -21,7 +21,7 @@ public class CustomHandlerInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
-        log.error("postHandle:请求后调用");
+        log.error("请求完成");
     }
 
     @Override

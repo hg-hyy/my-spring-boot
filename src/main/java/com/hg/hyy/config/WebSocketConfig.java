@@ -1,6 +1,6 @@
 package com.hg.hyy.config;
 
-import com.hg.hyy.Interceptors.WebSocketInterceptor;
+import com.hg.hyy.interceptors.WebSocketInterceptor;
 import com.hg.hyy.utils.MyMessageHandler;
 
 import org.springframework.context.annotation.Bean;
