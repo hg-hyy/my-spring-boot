@@ -7,7 +7,6 @@ import com.hg.hyy.model.SysRole;
 import com.hg.hyy.model.SysUser;
 import com.hg.hyy.model.SysUserRole;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +19,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author zenghui
- * @date 2020-05-20
+ * @author hyy
+ * @date 2021-11-18
  */
 @Service
 public class SysUserDetailService implements UserDetailsService {

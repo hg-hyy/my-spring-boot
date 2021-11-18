@@ -16,8 +16,11 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 /**
  * spring-Security相关配置
  *
- * @since 1.0.0
+/**
+ * @author hyy
+ * @date 2021-11-18
  */
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {

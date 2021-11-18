@@ -16,9 +16,10 @@ import java.text.MessageFormat;
 /**
  * 自定义{@link org.springframework.messaging.support.ChannelInterceptor}，实现断开连接的处理
  *
- * @author zifangsky
- * @date 2018/10/10
- * @since 1.0.0
+ * /**
+ * 
+ * @author hyy
+ * @date 2021-11-18
  */
 @Component
 public class WsChannelInterceptor implements ChannelInterceptor {

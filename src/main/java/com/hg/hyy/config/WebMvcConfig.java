@@ -1,6 +1,6 @@
 package com.hg.hyy.config;
 
-import com.hg.hyy.Interceptors.CustomHandlerInterceptor;
+import com.hg.hyy.interceptors.CustomHandlerInterceptor;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
