@@ -50,8 +50,7 @@ public class ViewController {
   // You can also add the @CrossOrigin annotation at the controller class level as
   // well, to enable CORS on all handler methods of this class.
   @GetMapping("/greet")
-  public String greet(
-      @RequestParam(value = "name", defaultValue = "World") String name, Model model) {
+  public String greet(@RequestParam(value = "name", defaultValue = "World") String name, Model model) {
     Greeting g = new Greeting(counter.incrementAndGet(), String.format(template, name));
     model.addAttribute("g", g);
     log.error("hello this is test");

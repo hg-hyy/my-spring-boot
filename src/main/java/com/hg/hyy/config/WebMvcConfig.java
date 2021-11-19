@@ -26,25 +26,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
-    registry
-        .addResourceHandler("swagger-ui.html")
-        .addResourceLocations("classpath:/META-INF/resources/");
-    registry
-        .addResourceHandler("/webjars/**")
-        .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
   }
 
   /** 配置CORS跨域 */
   @Override
   public void addCorsMappings(CorsRegistry registry) {
-    registry
-        .addMapping("/v1/*")
-        .allowedOrigins("http://localhost:8090")
-        .allowedMethods("POST", "GET")
-        .allowedHeaders("*")
-        .exposedHeaders("*")
-        .allowCredentials(true)
-        .maxAge(3600);
+    registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090").allowedMethods("POST", "GET")
+        .allowedHeaders("*").exposedHeaders("*").allowCredentials(true).maxAge(3600);
   }
 
   /** 拦截器配置 */

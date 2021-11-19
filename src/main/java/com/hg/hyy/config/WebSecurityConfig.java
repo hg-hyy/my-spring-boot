@@ -16,11 +16,12 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 /**
  * spring-Security相关配置
  *
- * <p>/**
  *
  * @author hyy
  * @since 2021-11-18
+ * 
  */
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -52,36 +53,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers(
-            "/v1/hello-spring",
-            "/v1/greeting",
-            "/v1/greeting1",
-            "/spring.ws",
-            "/stomp.ws",
-            "/annotation.ws",
-            "/v2/**",
-            "/*",
-            "/file/**",
-            "/test/**")
-        .permitAll()
-        .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico")
-        .permitAll()
-        .antMatchers("/v2/role", "/v2/wss")
-        .access("hasRole('USER')")
-        .antMatchers("/v2/greet")
+        .antMatchers("/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/spring.ws", "/stomp.ws", "/annotation.ws",
+            "/v2/**", "/*", "/file/**", "/test/**")
+        .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll()
+        .antMatchers("/v2/role", "/v2/wss").access("hasRole('USER')").antMatchers("/v2/greet")
         .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
         // .and().rememberMe().tokenRepository( persistentTokenRepository() )
-        .anyRequest()
-        .access("@myAccessImpl.hasPermit(request,authentication)")
+        .anyRequest().access("@myAccessImpl.hasPermit(request,authentication)")
         // .anyRequest().authenticated()
-        .and()
-        .formLogin()
-        .loginPage("/login")
-        .defaultSuccessUrl("/v2/role")
-        .permitAll()
-        .and()
-        .logout()
-        .permitAll();
+        .and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/role").permitAll().and().logout().permitAll();
 
     http.csrf().disable();
 
@@ -97,8 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring()
-        .antMatchers("/index.html", "/static/**", "/favicon.ico")
+    web.ignoring().antMatchers("/index.html", "/static/**", "/favicon.ico")
         // 给 swagger 放行；不需要权限能访问的资源
         .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
   }
