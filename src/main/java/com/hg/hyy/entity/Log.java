@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Log {
-    private static String logPrefix = "log ---> ";
+    private static final String logPrefix = "log ---> ";
     private static Log instance;
     private static Logger logger = null;
-    private static Map<Class<?>, Logger> loggerList = new HashMap<Class<?>, Logger>(); // 用于缓存logger对象
+    private static final Map<Class<?>, Logger> loggerList = new HashMap<>(); // 用于缓存logger对象
 
     /**
      * 定义私有构造方法实现单例
@@ -20,11 +20,11 @@ public class Log {
 
     /**
      * 功能说明：获取服务实例的静态方法 修改说明：
-     * 
+     *
+     * @param obj 传入调用此方法的对象
+     * @return 返回值
      * @author badao
      * @date
-     * @param obj 传入调用此方法的对象
-     * @return
      */
     public synchronized static Log getLog(Object obj) {
         if (instance == null) {
@@ -41,11 +41,11 @@ public class Log {
 
     /**
      * 功能说明：获取服务实例的静态方法 修改说明：
-     * 
+     *
+     * @param clazz 传入调用此方法的类型
+     * @return 返回值
      * @author badao
      * @date
-     * @param clazz 传入调用此方法的类型
-     * @return
      */
     public synchronized static Log getLog(Class<?> clazz) {
         if (instance == null) {
@@ -61,10 +61,10 @@ public class Log {
 
     /**
      * 功能说明：获取服务实例的静态方法 修改说明：
-     * 
+     *
+     * @return 返回值
      * @author badao
      * @date
-     * @return
      */
     public synchronized static Log getLog() {
         if (instance == null) {

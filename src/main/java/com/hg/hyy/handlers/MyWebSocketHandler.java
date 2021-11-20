@@ -1,34 +1,31 @@
-package com.hg.hyy.utils;
+package com.hg.hyy.handlers;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.NonNull;
+import org.springframework.web.socket.*;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
-
-public class MyMessageHandler implements WebSocketHandler {
+public class MyWebSocketHandler implements WebSocketHandler {
 
     /**
      * userMap:使用线程安全map存储用户连接webscoket信息
-     * 
+     *
      * @since JDK 1.7
      */
-    private final static Map<String, WebSocketSession> userMap = new ConcurrentHashMap<String, WebSocketSession>();
+    private final static Map<String, WebSocketSession> userMap = new ConcurrentHashMap<>();
 
     /**
      * 关闭websocket时调用该方法
-     * 
+     *
      * @see org.springframework.web.socket.WebSocketHandler#afterConnectionClosed(org.springframework.web.socket.WebSocketSession,
-     *      org.springframework.web.socket.CloseStatus)
+     * org.springframework.web.socket.CloseStatus)
      */
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) throws Exception {
         String userId = this.getUserId(session);
         if (StringUtils.isNoneBlank(userId)) {
             userMap.remove(userId);
@@ -41,11 +38,11 @@ public class MyMessageHandler implements WebSocketHandler {
 
     /**
      * 建立websocket连接时调用该方法
-     * 
+     * <p>
      * org.springframework.web.socket.WebSocketHandler#afterConnectionEstablished(org.springframework.web.socket.WebSocketSession)
      */
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) throws Exception {
         String userId = this.getUserId(session);
         if (StringUtils.isNoneBlank(userId)) {
             userMap.put(userId, session);
@@ -56,12 +53,12 @@ public class MyMessageHandler implements WebSocketHandler {
 
     /**
      * 客户端调用websocket.send时候，会调用该方法,进行数据通信
-     * 
+     * <p>
      * org.springframework.web.socket.WebSocketHandler#handleMessage(org.springframework.web.socket.WebSocketSession,
      * org.springframework.web.socket.WebSocketMessage)
      */
     @Override
-    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+    public void handleMessage(@NonNull WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String msg = message.toString();
         String userId = this.getUserId(session);
         System.err.println("用户" + userId + "发送的消息是：" + msg);
@@ -71,7 +68,7 @@ public class MyMessageHandler implements WebSocketHandler {
 
     /**
      * 传输过程出现异常时，调用该方法
-     * 
+     * <p>
      * org.springframework.web.socket.WebSocketHandler#handleTransportError(org.springframework.web.socket.WebSocketSession,
      * java.lang.Throwable)
      */
@@ -82,7 +79,6 @@ public class MyMessageHandler implements WebSocketHandler {
     }
 
     /**
-     * 
      * org.springframework.web.socket.WebSocketHandler#supportsPartialMessages()
      */
     @Override
@@ -93,7 +89,6 @@ public class MyMessageHandler implements WebSocketHandler {
 
     /**
      * sendMessageToUser:发给指定用户
-     * 
      */
     public void sendMessageToUser(String userId, String contents) {
         WebSocketSession session = userMap.get(userId);
@@ -109,7 +104,6 @@ public class MyMessageHandler implements WebSocketHandler {
 
     /**
      * sendMessageToAllUsers:发给所有的用户
-     * 
      */
     public void sendMessageToAllUsers(String contents) {
         Set<String> userIds = userMap.keySet();
@@ -120,16 +114,15 @@ public class MyMessageHandler implements WebSocketHandler {
 
     /**
      * getUserId:获取用户id
-     * 
-     * @author liuchao
-     * @param session
-     * @return
-     * @since JDK 1.7
+     *
+     * @param session ws会话
+     * @return 用户id
+     * @author hyy
+     * @since JDK 17
      */
     private String getUserId(WebSocketSession session) {
         try {
-            String userId = (String) session.getAttributes().get("currentUser");
-            return userId;
+            return (String) session.getAttributes().get("currentUser");
         } catch (Exception e) {
             e.printStackTrace();
         }

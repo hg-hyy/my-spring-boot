@@ -1,8 +1,7 @@
 package com.hg.hyy.config;
 
+import com.hg.hyy.handlers.MyWebSocketHandler;
 import com.hg.hyy.interceptors.WebSocketInterceptor;
-import com.hg.hyy.utils.MyMessageHandler;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
@@ -23,12 +22,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public WebSocketHandler myHandler() {
-        return new MyMessageHandler();
+        return new MyWebSocketHandler();
     }
 
     /**
      * 注册handle
-     * 
+     *
      * @see org.springframework.web.socket.config.annotation.WebSocketConfigurer#registerWebSocketHandlers(org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry)
      */
     @Override

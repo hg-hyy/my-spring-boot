@@ -1,28 +1,71 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>form_valida</title>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+        }
+
+        form {
+            margin: 0 auto;
+            max-width: 530px;
+            padding: 15px;
+        }
+    </style>
+</head>
 <body>
-<form action="#" th:action="@{/v2/form}" th:object="${person}" method="post">
-    <table>
-        <tr>
-            <td>Name:</td>
-            <td><label>
-                <input type="text" th:field="*{name}"/>
-            </label></td>
-            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
-        </tr>
-        <tr>
-            <td>Age:</td>
-            <td><label>
-                <input type="text" th:field="*{age}"/>
-            </label></td>
-            <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
-        </tr>
-        <tr>
-            <td>
-                <button type="submit">Submit</button>
-            </td>
-        </tr>
-    </table>
-</form>
+<div class="container">
+    <form action="#" th:action="@{/v2/form}" th:object="${person}" method="post">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>
+                    label
+                </th>
+                <th>
+                    label
+                </th>
+                <th>
+                    info
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <label for="name">Name:</label>
+                </td>
+                <td>
+                    <input class="form-control" id="name" type="text" th:field="*{name}"/>
+                </td>
+                <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="age">Age:</label>
+                </td>
+                <td>
+                    <input class="form-control" id="age" type="text" th:field="*{age}"/>
+                </td>
+                <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
 </body>
 </html>

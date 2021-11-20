@@ -12,20 +12,36 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
  * spring-Security相关配置
  *
- *
  * @author hyy
  * @since 2021-11-18
- * 
  */
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
   private final SysUserDetailService sysUserDetailService;
+  private AuthenticationSuccessHandler mySuccessHandler;
+
+  @Autowired
+  public void setMySuccessHandler(AuthenticationSuccessHandler mySuccessHandler) {
+    this.mySuccessHandler = mySuccessHandler;
+  }
+
+  private AuthenticationFailureHandler myFailureHandler;
+
+  @Autowired
+  public void setMyFailureHandler(AuthenticationFailureHandler myFailureHandler) {
+    this.myFailureHandler = myFailureHandler;
+  }
+
+
   private AccessDeniedHandler myAccessDeniedHandler;
 
   @Autowired
@@ -53,15 +69,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers("/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/spring.ws", "/stomp.ws", "/annotation.ws",
-            "/v2/**", "/*", "/file/**", "/test/**")
-        .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll()
-        .antMatchers("/v2/role", "/v2/wss").access("hasRole('USER')").antMatchers("/v2/greet")
-        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-        // .and().rememberMe().tokenRepository( persistentTokenRepository() )
-        .anyRequest().access("@myAccessImpl.hasPermit(request,authentication)")
-        // .anyRequest().authenticated()
-        .and().formLogin().loginPage("/login").defaultSuccessUrl("/v2/role").permitAll().and().logout().permitAll();
+            .antMatchers("/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/spring.ws", "/stomp.ws", "/annotation.ws",
+                    "/v2/**", "/*", "/file/**", "/test/**")
+            .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll()
+            .antMatchers("/v2/role", "/v2/wss").access("hasRole('USER')").antMatchers("/v2/greet")
+            .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+            // .and().rememberMe().tokenRepository( persistentTokenRepository() )
+            .anyRequest().access("@myAccessImpl.hasPermit(request,authentication)")
+            // .anyRequest().authenticated()
+            .and().formLogin().loginPage("/login").loginProcessingUrl("/login")
+            .successForwardUrl("/v2/role")
+            .successHandler(mySuccessHandler)
+            .failureHandler(myFailureHandler)
+            .defaultSuccessUrl("/v2/role")
+            .failureForwardUrl("/error").permitAll()
+            .and().logout().permitAll();
 
     http.csrf().disable();
 
@@ -78,8 +100,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring().antMatchers("/index.html", "/static/**", "/favicon.ico")
-        // 给 swagger 放行；不需要权限能访问的资源
-        .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
+            // 给 swagger 放行；不需要权限能访问的资源
+            .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
   }
 
   // 加密方式

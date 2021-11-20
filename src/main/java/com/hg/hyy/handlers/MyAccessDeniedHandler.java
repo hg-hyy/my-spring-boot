@@ -1,4 +1,4 @@
-package com.hg.hyy.utils;
+package com.hg.hyy.handlers;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -13,9 +13,9 @@ import java.io.PrintWriter;
 @Component
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
     @Override
-    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException, IOException {
+    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws ServletException, IOException {
         httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        httpServletResponse.setHeader("Content-Type","application/json");
+        httpServletResponse.setHeader("Content-Type", "application/json");
         httpServletResponse.setCharacterEncoding("utf-8");
         PrintWriter writer = httpServletResponse.getWriter();
         writer.write("{\"status\":\"403\",\"msg\":\"没有权限访问,请联系管理员\"}");

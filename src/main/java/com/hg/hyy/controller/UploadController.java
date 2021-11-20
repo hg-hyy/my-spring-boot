@@ -13,35 +13,34 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/file")
-public class FileUploadController {
+public class UploadController {
 
   private final StorageService storageService;
 
   @Autowired
-  public FileUploadController(StorageService storageService) {
+  public UploadController(StorageService storageService) {
     this.storageService = storageService;
   }
 
   @GetMapping("/")
-  public String listUploadedFiles(Model model) throws IOException {
+  public String listUploadedFiles(Model model) {
 
     model.addAttribute(
-        "files",
-        storageService
-            .loadAll()
-            .map(
-                path ->
-                    MvcUriComponentsBuilder.fromMethodName(
-                            FileUploadController.class, "serveFile", path.getFileName().toString())
-                        .build()
-                        .toUri()
-                        .toString())
-            .collect(Collectors.toList()));
+            "files",
+            storageService
+                    .loadAll()
+                    .map(
+                            path ->
+                                    MvcUriComponentsBuilder.fromMethodName(
+                                                    UploadController.class, "serveFile", path.getFileName().toString())
+                                            .build()
+                                            .toUri()
+                                            .toString())
+                    .collect(Collectors.toList()));
 
     return "uploadForm";
   }
@@ -52,18 +51,18 @@ public class FileUploadController {
 
     Resource file = storageService.loadAsResource(filename);
     return ResponseEntity.ok()
-        .header(
-            HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-        .body(file);
+            .header(
+                    HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+            .body(file);
   }
 
   @PostMapping("/upload")
   public String handleFileUpload(
-      @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+          @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
     storageService.store(file);
     redirectAttributes.addFlashAttribute(
-        "message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+            "message", "You successfully uploaded " + file.getOriginalFilename() + "!");
 
     return "redirect:/file/";
   }
