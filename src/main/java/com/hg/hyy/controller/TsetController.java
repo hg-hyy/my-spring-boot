@@ -54,9 +54,7 @@ public class TsetController {
   @ApiOperation("测试redis")
   @GetMapping("/redis")
   public void redis() throws InterruptedException {
-
     while (receiver.getCount() == 0) {
-
       log.error("Sending message...");
       template.convertAndSend("chat", "Hello from Redis!");
       Thread.sleep(500L);

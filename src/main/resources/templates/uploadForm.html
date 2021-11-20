@@ -1,33 +1,53 @@
-<html
-        xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Upload_File</title>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+        }
+
+        .file {
+            margin: 0 auto;
+            max-width: 530px;
+            padding: 15px;
+        }
+    </style>
+</head>
 <body>
+<div class="file">
+    <div th:if="${message}">
+        <h2 th:text="${message}"></h2>
+    </div>
+    <div>
+        <form method="POST" enctype="multipart/form-data" th:action="@{/file/upload}">
+            <table class="table table-bordered table-info">
+                <tr>
+                    <td>Upload file:</td>
+                    <td><input class="form-control" type="file" name="file"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input class="btn btn-info" type="submit" value="Upload"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
 
-<div th:if="${message}">
-    <h2 th:text="${message}"></h2>
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item" th:each="file : ${files}">
+                <a th:href="${file}" th:text="${file}"></a>
+            </li>
+
+        </ul>
+    </div>
 </div>
-
-<div>
-    <form method="POST" enctype="multipart/form-data" th:action="@{/file/upload}">
-        <table>
-            <tr>
-                <td>File to upload:</td>
-                <td><input type="file" name="file"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Upload"/></td>
-            </tr>
-        </table>
-    </form>
-</div>
-
-<div>
-    <ul>
-        <li th:each="file : ${files}">
-            <a th:href="${file}" th:text="${file}"></a>
-        </li>
-    </ul>
-</div>
-
 </body>
 </html>
