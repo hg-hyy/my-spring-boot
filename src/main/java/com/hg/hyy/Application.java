@@ -13,6 +13,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -20,11 +21,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 @MapperScan("com.hg.hyy.mapper")
-public class Application extends SpringBootServletInitializer { // SpringBootServletInitializer:构建WAR文件并部署，
+public class Application
+    extends SpringBootServletInitializer { // SpringBootServletInitializer:构建WAR文件并部署，
 
   private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -39,7 +42,7 @@ public class Application extends SpringBootServletInitializer { // SpringBootSer
   }
 
   public static void main(String[] args) {
-    // SpringApplication.run(Application.class, args);
+    //    SpringApplication.run(Application.class, args);
 
     // SpringApplication application = new SpringApplication(MyApplication.class);
     // application.setBannerMode(Banner.Mode.OFF);
@@ -69,8 +72,14 @@ public class Application extends SpringBootServletInitializer { // SpringBootSer
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090").allowedMethods("POST", "GET")
-            .allowedHeaders("*").exposedHeaders("*").allowCredentials(true).maxAge(3600);
+        registry
+            .addMapping("/v1/*")
+            .allowedOrigins("http://localhost:8090")
+            .allowedMethods("POST", "GET")
+            .allowedHeaders("*")
+            .exposedHeaders("*")
+            .allowCredentials(true)
+            .maxAge(3600);
       }
     };
   }
@@ -83,7 +92,8 @@ public class Application extends SpringBootServletInitializer { // SpringBootSer
   @Bean
   public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
     return args -> {
-      Quote quote = restTemplate.getForObject("https://quoters.apps.pcfone.io/api/random", Quote.class);
+      Quote quote =
+          restTemplate.getForObject("https://quoters.apps.pcfone.io/api/random", Quote.class);
       assert quote != null;
       log.error("应用启动获取资源成功：" + quote.getValue().getQuote());
     };
@@ -91,13 +101,19 @@ public class Application extends SpringBootServletInitializer { // SpringBootSer
 
   /*
    * 打印所有spring bean
-   *
-   * @Bean public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-   * return args -> {
-   * System.out.println("Let's inspect the beans provided by Spring Boot:");
-   * String[] beanNames = ctx.getBeanDefinitionNames(); Arrays.sort(beanNames);
-   * for (String beanName : beanNames) { System.out.println(beanName); } }; }
    */
+  @Bean
+  public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+    return args -> {
+      log.error("Let's inspect the beans provided by Spring Boot:");
+      String[] beanNames = ctx.getBeanDefinitionNames();
+      Arrays.sort(beanNames);
+      for (String beanName : beanNames) {
+        System.out.println(beanName);
+      }
+    };
+  }
+
   @Bean
   CommandLineRunner init(StorageService storageService) {
     return (args) -> {

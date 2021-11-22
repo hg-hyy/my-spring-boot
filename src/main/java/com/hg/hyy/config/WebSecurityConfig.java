@@ -84,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico")
         .permitAll()
-        .antMatchers("/v2/role", "/v2/wss")
+        .antMatchers("/view/role", "/view/wss")
         .access("hasRole('ADMIN')")
         .antMatchers("/v2/greet")
         .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
@@ -96,17 +96,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .formLogin()
         .loginPage("/login") // 登录页面
         .loginProcessingUrl("/login") // 登录处理逻辑
-        .defaultSuccessUrl("/v2/role") // 默认登陆成功跳转
-        .successForwardUrl("/v2/role") // 登陆成功跳转
-        .successHandler(new MySuccessHandler("/v2/role")) // 自定义登陆成功处理
+        .defaultSuccessUrl("/view/role") // 默认登陆成功跳转
+        .successForwardUrl("/view/role") // 登陆成功跳转
+        .successHandler(new MySuccessHandler("/view/role")) // 自定义登陆成功处理
         .failureForwardUrl("/error") // 登录失败页面
         .failureHandler(new MyFailureHandler()) // 自定义登陆失败处理
         .permitAll()
         .and()
         .logout()
         .permitAll();
-    // 开启csrf
+    // 关闭csrf
     // http.csrf().disable();
+
     // 开启 Remember-Me 功能
     http.rememberMe()
         // 指定在登录时“记住我”的 HTTP 参数，默认为 remember-me
