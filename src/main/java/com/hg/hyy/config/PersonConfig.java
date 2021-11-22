@@ -1,10 +1,12 @@
 package com.hg.hyy.config;
 
-import java.util.*;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 @ConfigurationProperties(prefix = "data")
@@ -15,6 +17,9 @@ public class PersonConfig {
     private String lastName;
     private Integer age;
     private Boolean boss;
+    private Date birth;
+    private Map<String, String> person;
+    private List<String> list;
 
     public String getLastName() {
         return lastName;
@@ -40,6 +45,7 @@ public class PersonConfig {
         this.boss = boss;
     }
 
+
     public Date getBirth() {
         return birth;
     }
@@ -47,11 +53,6 @@ public class PersonConfig {
     public void setBirth(Date birth) {
         this.birth = birth;
     }
-
-    private Date birth;
-
-    private Map<String, String> person;
-    private List<String> list;
 
     public Map<String, String> getPerson() {
         return person;

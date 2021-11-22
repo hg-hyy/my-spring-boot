@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Api(tags = "view")
 @Controller
-@RequestMapping("/v2")
+@RequestMapping("/view")
 public class ViewController {
 
   private static final Logger log = LoggerFactory.getLogger(VueController.class);
@@ -43,7 +43,7 @@ public class ViewController {
   public String index(Model model) {
     Msg msg = new Msg("测试标题", 1000, "额外信息，只对管理员显示");
     model.addAttribute("msg", msg);
-    return "index";
+    return "role";
   }
 
   @ApiOperation("测试 get传参 model传参到html")

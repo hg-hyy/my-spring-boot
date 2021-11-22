@@ -1,5 +1,16 @@
 package com.hg.hyy.interfaces.impl;
 
+import com.hg.hyy.exception.StorageException;
+import com.hg.hyy.exception.StorageFileNotFoundException;
+import com.hg.hyy.interfaces.StorageService;
+import com.hg.hyy.properties.StorageProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -9,23 +20,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
-import com.hg.hyy.exception.StorageException;
-import com.hg.hyy.exception.StorageFileNotFoundException;
-import com.hg.hyy.interfaces.StorageService;
-import com.hg.hyy.properties.StorageProperties;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 @Service
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
-
+    
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());

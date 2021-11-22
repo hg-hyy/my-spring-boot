@@ -71,52 +71,52 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers(
-            "/v1/hello-spring",
-            "/v1/greeting",
-            "/v1/greeting1",
-            "/spring.ws",
-            "/stomp.ws",
-            "/annotation.ws",
-            "/*",
-            "/file/**",
-            "/test/**")
-        .permitAll()
-        .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico")
-        .permitAll()
-        .antMatchers("/v2/role", "/v2/wss")
-        .access("hasRole('ADMIN')")
-        .antMatchers("/v2/greet")
-        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-        // .and().rememberMe().tokenRepository( persistentTokenRepository() )
-        .anyRequest()
-        .access("@myAccessImpl.hasPermit(request,authentication)")
-        // .anyRequest().authenticated()
-        .and()
-        .formLogin()
-        .loginPage("/login") // 登录页面
-        .loginProcessingUrl("/login") // 登录处理逻辑
-        .defaultSuccessUrl("/v2/role") // 默认登陆成功跳转
-        .successForwardUrl("/v2/role") // 登陆成功跳转
-        .successHandler(new MySuccessHandler("/v2/role")) // 自定义登陆成功处理
-        .failureForwardUrl("/error") // 登录失败页面
-        .failureHandler(new MyFailureHandler()) // 自定义登陆失败处理
-        .permitAll()
-        .and()
-        .logout()
-        .permitAll();
+            .antMatchers(
+                    "/v1/hello-spring",
+                    "/v1/greeting",
+                    "/v1/greeting1",
+                    "/spring.ws",
+                    "/stomp.ws",
+                    "/annotation.ws",
+                    "/*",
+                    "/file/**",
+                    "/test/**")
+            .permitAll()
+            .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico")
+            .permitAll()
+            .antMatchers("/view/role", "/view/wss")
+            .access("hasRole('ADMIN')")
+            .antMatchers("/v2/greet")
+            .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+            // .and().rememberMe().tokenRepository( persistentTokenRepository() )
+            .anyRequest()
+            .access("@myAccessImpl.hasPermit(request,authentication)")
+            // .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .loginPage("/login") // 登录页面
+            .loginProcessingUrl("/login") // 登录处理逻辑
+            .defaultSuccessUrl("/view/role") // 默认登陆成功跳转
+            .successForwardUrl("/view/role") // 登陆成功跳转
+            .successHandler(new MySuccessHandler("/view/role")) // 自定义登陆成功处理
+            .failureForwardUrl("/error") // 登录失败页面
+            .failureHandler(new MyFailureHandler()) // 自定义登陆失败处理
+            .permitAll()
+            .and()
+            .logout()
+            .permitAll();
     // 开启csrf
     // http.csrf().disable();
     // 开启 Remember-Me 功能
     http.rememberMe()
-        // 指定在登录时“记住我”的 HTTP 参数，默认为 remember-me
-        .rememberMeParameter("remember-me")
-        // .rememberMeServices()//自定义记住我
-        // 设置 Token 有效期为 200s，默认时长为 2 星期
-        .tokenValiditySeconds(200)
-        // 指定 UserDetailsService 对象
-        .userDetailsService(sysUserDetailService)
-        .tokenRepository(jdbcTokenRepository);
+            // 指定在登录时“记住我”的 HTTP 参数，默认为 remember-me
+            .rememberMeParameter("remember-me")
+            // .rememberMeServices()//自定义记住我
+            // 设置 Token 有效期为 200s，默认时长为 2 星期
+            .tokenValiditySeconds(200)
+            // 指定 UserDetailsService 对象
+            .userDetailsService(sysUserDetailService)
+            .tokenRepository(jdbcTokenRepository);
 
     // 统一的403页面
     http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
@@ -131,9 +131,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring()
-        .antMatchers("/index.html", "/static/**", "/favicon.ico")
-        // 给 swagger 放行；不需要权限能访问的资源
-        .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
+            .antMatchers("/index.html", "/static/**", "/favicon.ico")
+            // 给 swagger 放行；不需要权限能访问的资源
+            .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
   }
 
   // 加密方式
@@ -161,7 +161,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   public PersistentTokenRepository MyTokenRepository() {
     JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
     jdbcTokenRepository.setDataSource(dataSource);
-    //    jdbcTokenRepository.setCreateTableOnStartup(true);//第一次创建表
+//    jdbcTokenRepository.setCreateTableOnStartup(true);//第一次创建表
     return jdbcTokenRepository;
   }
 }
