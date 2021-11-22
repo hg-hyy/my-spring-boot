@@ -6,6 +6,8 @@ import com.hg.hyy.mapper.SysUserRoleMapper;
 import com.hg.hyy.model.SysRole;
 import com.hg.hyy.model.SysUser;
 import com.hg.hyy.model.SysUserRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,46 +26,47 @@ import java.util.List;
  */
 @Service
 public class SysUserDetailService implements UserDetailsService {
-    private final SysUserMapper sysUserMapper;
-    private final SysRoleMapper sysRoleMapper;
-    private final SysUserRoleMapper sysUserRoleMapper;
-    private final Collection<GrantedAuthority> authorities = new ArrayList<>();
+  private Logger log = LoggerFactory.getLogger(SysUserDetailService.class);
+  private final SysUserMapper sysUserMapper;
+  private final SysRoleMapper sysRoleMapper;
+  private final SysUserRoleMapper sysUserRoleMapper;
+  private final Collection<GrantedAuthority> authorities = new ArrayList<>();
 
+  public SysUserDetailService(
+      SysUserMapper sysUserMapper,
+      SysRoleMapper sysRoleMapper,
+      SysUserRoleMapper sysUserRoleMapper) {
+    this.sysUserMapper = sysUserMapper;
+    this.sysRoleMapper = sysRoleMapper;
+    this.sysUserRoleMapper = sysUserRoleMapper;
+  }
 
-    public SysUserDetailService(SysUserMapper sysUserMapper, SysRoleMapper sysRoleMapper,
-                                SysUserRoleMapper sysUserRoleMapper) {
-        this.sysUserMapper = sysUserMapper;
-        this.sysRoleMapper = sysRoleMapper;
-        this.sysUserRoleMapper = sysUserRoleMapper;
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    log.error("自定义登录逻辑");
+    // 从数据库中取出用户信息
+    SysUser user = sysUserMapper.selectByName(username);
+
+    // 判断用户是否存在
+    if (user == null) {
+      throw new UsernameNotFoundException("用户名不存在");
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("自定义登录逻辑");
-        // 从数据库中取出用户信息
-        SysUser user = sysUserMapper.selectByName(username);
-
-        // 判断用户是否存在
-        if (user == null) {
-            throw new UsernameNotFoundException("用户名不存在");
-        }
-
-        // 添加权限
-        List<SysUserRole> userRoles = sysUserRoleMapper.listByUserId(user.getId());
-        for (SysUserRole userRole : userRoles) {
-            SysRole role = sysRoleMapper.selectById(userRole.getRoleId());
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-
-        // List<GrantedAuthority> auths =
-        // AuthorityUtils.commaSeparatedStringToAuthorityList("admins,ROLE_sale");
-
-        // 返回UserDetails实现类
-        return new User(user.getName(), user.getPassword(), authorities);
-
+    // 添加权限
+    List<SysUserRole> userRoles = sysUserRoleMapper.listByUserId(user.getId());
+    for (SysUserRole userRole : userRoles) {
+      SysRole role = sysRoleMapper.selectById(userRole.getRoleId());
+      authorities.add(new SimpleGrantedAuthority(role.getName()));
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
+    // List<GrantedAuthority> auths =
+    // AuthorityUtils.commaSeparatedStringToAuthorityList("admins,ROLE_sale");
+
+    // 返回UserDetails实现类
+    return new User(user.getName(), user.getPassword(), authorities);
+  }
+
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return authorities;
+  }
 }

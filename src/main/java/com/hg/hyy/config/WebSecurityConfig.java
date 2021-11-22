@@ -1,5 +1,7 @@
 package com.hg.hyy.config;
 
+import com.hg.hyy.handlers.MyFailureHandler;
+import com.hg.hyy.handlers.MySuccessHandler;
 import com.hg.hyy.service.SysUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +14,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * spring-Security相关配置
@@ -21,28 +25,26 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
  * @author hyy
  * @since 2021-11-18
  */
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final SysUserDetailService sysUserDetailService;
-  private AuthenticationSuccessHandler mySuccessHandler;
-
-  @Autowired
-  public void setMySuccessHandler(AuthenticationSuccessHandler mySuccessHandler) {
-    this.mySuccessHandler = mySuccessHandler;
-  }
-
-  private AuthenticationFailureHandler myFailureHandler;
-
-  @Autowired
-  public void setMyFailureHandler(AuthenticationFailureHandler myFailureHandler) {
-    this.myFailureHandler = myFailureHandler;
-  }
-
 
   private AccessDeniedHandler myAccessDeniedHandler;
+  private DataSource dataSource;
+
+  private PersistentTokenRepository jdbcTokenRepository;
+
+  @Autowired
+  public void setDataSource(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
+
+  @Autowired
+  public void setJdbcTokenRepository(PersistentTokenRepository jdbcTokenRepository) {
+    this.jdbcTokenRepository = jdbcTokenRepository;
+  }
 
   @Autowired
   public void setMyAccessDeniedHandler(AccessDeniedHandler myAccessDeniedHandler) {
@@ -69,23 +71,52 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-            .antMatchers("/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/spring.ws", "/stomp.ws", "/annotation.ws",
-                    "/v2/**", "/*", "/file/**", "/test/**")
-            .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll()
-            .antMatchers("/v2/role", "/v2/wss").access("hasRole('USER')").antMatchers("/v2/greet")
-            .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-            // .and().rememberMe().tokenRepository( persistentTokenRepository() )
-            .anyRequest().access("@myAccessImpl.hasPermit(request,authentication)")
-            // .anyRequest().authenticated()
-            .and().formLogin().loginPage("/login").loginProcessingUrl("/login")
-            .successForwardUrl("/v2/role")
-            .successHandler(mySuccessHandler)
-            .failureHandler(myFailureHandler)
-            .defaultSuccessUrl("/v2/role")
-            .failureForwardUrl("/error").permitAll()
-            .and().logout().permitAll();
-
-    http.csrf().disable();
+        .antMatchers(
+            "/v1/hello-spring",
+            "/v1/greeting",
+            "/v1/greeting1",
+            "/spring.ws",
+            "/stomp.ws",
+            "/annotation.ws",
+            "/*",
+            "/file/**",
+            "/test/**")
+        .permitAll()
+        .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico")
+        .permitAll()
+        .antMatchers("/v2/role", "/v2/wss")
+        .access("hasRole('ADMIN')")
+        .antMatchers("/v2/greet")
+        .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+        // .and().rememberMe().tokenRepository( persistentTokenRepository() )
+        .anyRequest()
+        .access("@myAccessImpl.hasPermit(request,authentication)")
+        // .anyRequest().authenticated()
+        .and()
+        .formLogin()
+        .loginPage("/login") // 登录页面
+        .loginProcessingUrl("/login") // 登录处理逻辑
+        .defaultSuccessUrl("/v2/role") // 默认登陆成功跳转
+        .successForwardUrl("/v2/role") // 登陆成功跳转
+        .successHandler(new MySuccessHandler("/v2/role")) // 自定义登陆成功处理
+        .failureForwardUrl("/error") // 登录失败页面
+        .failureHandler(new MyFailureHandler()) // 自定义登陆失败处理
+        .permitAll()
+        .and()
+        .logout()
+        .permitAll();
+    // 开启csrf
+    // http.csrf().disable();
+    // 开启 Remember-Me 功能
+    http.rememberMe()
+        // 指定在登录时“记住我”的 HTTP 参数，默认为 remember-me
+        .rememberMeParameter("remember-me")
+        // .rememberMeServices()//自定义记住我
+        // 设置 Token 有效期为 200s，默认时长为 2 星期
+        .tokenValiditySeconds(200)
+        // 指定 UserDetailsService 对象
+        .userDetailsService(sysUserDetailService)
+        .tokenRepository(jdbcTokenRepository);
 
     // 统一的403页面
     http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
@@ -99,9 +130,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/index.html", "/static/**", "/favicon.ico")
-            // 给 swagger 放行；不需要权限能访问的资源
-            .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
+    web.ignoring()
+        .antMatchers("/index.html", "/static/**", "/favicon.ico")
+        // 给 swagger 放行；不需要权限能访问的资源
+        .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
   }
 
   // 加密方式
@@ -123,5 +155,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return s.equals(charSequence.toString());
       }
     };
+  }
+
+  @Bean
+  public PersistentTokenRepository MyTokenRepository() {
+    JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+    jdbcTokenRepository.setDataSource(dataSource);
+    //    jdbcTokenRepository.setCreateTableOnStartup(true);//第一次创建表
+    return jdbcTokenRepository;
   }
 }

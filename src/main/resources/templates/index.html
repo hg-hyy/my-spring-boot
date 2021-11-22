@@ -1,142 +1,145 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>hello spring boot</title>
-    <link rel="icon" th:href="@{/pic/favicon.ico}" />
+    <link rel="icon" th:href="@{/pic/favicon.ico}"/>
 
     <link
-      th:href="@{/css/bootstrap.min.css}"
-      rel="stylesheet"
-      type="text/css"
+            th:href="@{/css/bootstrap.min.css}"
+            rel="stylesheet"
+            type="text/css"
     />
-  </head>
-  <body>
-    <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </li>
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="navbarDropdown"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                        >
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Disabled</a>
+                    </li>
                 </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled">Disabled</a>
-              </li>
-            </ul>
-            <form class="d-flex">
-              <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button class="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
-          </div>
+                <form class="d-flex">
+                    <input
+                            class="form-control me-2"
+                            type="search"
+                            placeholder="Search"
+                            aria-label="Search"
+                    />
+                    <button class="btn btn-outline-success" type="submit">
+                        Search
+                    </button>
+                </form>
+            </div>
         </div>
-      </nav>
-      <table class="table table-bordered border-primary">
+    </nav>
+    <table class="table table-bordered border-primary">
         <thead>
-          <tr>
+        <tr>
             <th scope="col">#</th>
             <th scope="col">First</th>
             <th scope="col">Last</th>
             <th scope="col">Handle</th>
-          </tr>
+        </tr>
         </thead>
         <tbody>
-          <tr>
+        <tr>
             <th scope="row">1</th>
             <td>Mark</td>
             <td>Otto</td>
             <td>@mdo</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <th scope="row">2</th>
             <td>Jacob</td>
             <td>Thornton</td>
             <td>@fat</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <th scope="row">3</th>
             <td colspan="2">Larry the Bird</td>
             <td>@twitter</td>
-          </tr>
+        </tr>
         </tbody>
-      </table>
-      <div sec:authorize="isAuthenticated()">
+    </table>
+    <div sec:authorize="isAuthenticated()">
         <p>已登录</p>
         <p>登录名：<span sec:authentication="name"></span></p>
         <p>Password：<span sec:authentication="principal.password"></span></p>
+        <p>IP：<span sec:authentication="details.remoteAddress"></span></p>
+        <p>SessionID：<span sec:authentication="details.sessionId"></span></p>
         <div sec:authentication="principal.authorities"></div>
         <!-- works fine -->
         <p>Name：<span sec:authentication="principal.username"></span></p>
-        <p>Status：<span sec:authentication="principal.status"></span></p>
-      </div>
+    </div>
 
-      <div sec:authorize="!isAuthenticated()">
+    <div sec:authorize="!isAuthenticated()">
         <a th:href="@{/login}">登录</a>
-      </div>
-      <div sec:authorize="isAuthenticated()">
+    </div>
+    <div sec:authorize="isAuthenticated()">
         <a th:href="@{/logout}">退出</a>
-      </div>
+    </div>
 
-      <div class="starter-template">
+    <div class="starter-template">
         <h1 th:text="${msg.code}"></h1>
-        <p class="bg-primary" th:text="${msg.data}"></p>
+        <p class="bg-primary" th:text="${msg.msg}"></p>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-          <p class="bg-info" th:text="${msg.msg}"></p>
+            <p class="bg-info" th:text="${msg.data}"></p>
         </div>
         <div sec:authorize="hasRole('ROLE_USER')">
-          <p class="bg-info">无更多显示信息</p>
+            <p class="bg-info">这里需要user权限才能查看</p>
         </div>
         <form th:action="@{/logout}" method="post">
-          <input type="submit" class="btn btn-primary" value="注销" />
+            <input type="submit" class="btn btn-primary" value="注销"/>
         </form>
-      </div>
     </div>
-    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
-  </body>
+</div>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+</body>
 </html>
