@@ -26,8 +26,7 @@ import java.util.Arrays;
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 @MapperScan("com.hg.hyy.mapper")
-public class Application
-    extends SpringBootServletInitializer { // SpringBootServletInitializer:构建WAR文件并部署，
+public class Application extends SpringBootServletInitializer { // SpringBootServletInitializer:构建WAR文件并部署，
 
   private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -42,7 +41,8 @@ public class Application
   }
 
   public static void main(String[] args) {
-    //    SpringApplication.run(Application.class, args);
+
+    // SpringApplication.run(Application.class, args);
 
     // SpringApplication application = new SpringApplication(MyApplication.class);
     // application.setBannerMode(Banner.Mode.OFF);
@@ -72,14 +72,9 @@ public class Application
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry
-            .addMapping("/v1/*")
-            .allowedOrigins("http://localhost:8090")
-            .allowedMethods("POST", "GET")
-            .allowedHeaders("*")
-            .exposedHeaders("*")
-            .allowCredentials(true)
-            .maxAge(3600);
+        registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090").allowedMethods("POST", "GET")
+            .allowedHeaders("*").exposedHeaders("*").allowCredentials(true).maxAge(3600);
+
       }
     };
   }
@@ -92,8 +87,7 @@ public class Application
   @Bean
   public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
     return args -> {
-      Quote quote =
-          restTemplate.getForObject("https://quoters.apps.pcfone.io/api/random", Quote.class);
+      Quote quote = restTemplate.getForObject("https://quoters.apps.pcfone.io/api/random", Quote.class);
       assert quote != null;
       log.error("应用启动获取资源成功：" + quote.getValue().getQuote());
     };
