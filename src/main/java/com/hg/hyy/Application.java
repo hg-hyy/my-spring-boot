@@ -1,5 +1,8 @@
 package com.hg.hyy;
 
+import com.hg.hyy.config.MyConfig;
+import com.hg.hyy.entity.Human;
+import com.hg.hyy.entity.Pet;
 import com.hg.hyy.entity.Quote;
 import com.hg.hyy.interfaces.StorageService;
 import com.hg.hyy.properties.StorageProperties;
@@ -42,7 +45,8 @@ public class Application
   }
 
   public static void main(String[] args) {
-    //    SpringApplication.run(Application.class, args);
+
+    // SpringApplication.run(Application.class, args);
 
     // SpringApplication application = new SpringApplication(MyApplication.class);
     // application.setBannerMode(Banner.Mode.OFF);
@@ -111,6 +115,14 @@ public class Application
       for (String beanName : beanNames) {
         System.out.println(beanName);
       }
+      MyConfig bean = ctx.getBean(MyConfig.class);
+      Human human = bean.human();
+      Human human1 = bean.human();
+      System.out.println((human == human1));
+      log.error(human.toString());
+      Human fhh = ctx.getBean("fhh", Human.class);
+      Pet tom = ctx.getBean("tom", Pet.class);
+      System.out.println((fhh.getPet() == tom));
     };
   }
 
