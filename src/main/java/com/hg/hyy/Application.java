@@ -1,8 +1,5 @@
 package com.hg.hyy;
 
-import com.hg.hyy.config.MyConfig;
-import com.hg.hyy.entity.Human;
-import com.hg.hyy.entity.Pet;
 import com.hg.hyy.entity.Quote;
 import com.hg.hyy.interfaces.StorageService;
 import com.hg.hyy.properties.StorageProperties;
@@ -45,8 +42,12 @@ public class Application
   }
 
   public static void main(String[] args) {
+<<<<<<<<< Temporary merge branch 1
+//    SpringApplication.run(Application.class, args);
 
-    // SpringApplication.run(Application.class, args);
+=========
+    //    SpringApplication.run(Application.class, args);
+>>>>>>>>> Temporary merge branch 2
 
     // SpringApplication application = new SpringApplication(MyApplication.class);
     // application.setBannerMode(Banner.Mode.OFF);
@@ -76,6 +77,10 @@ public class Application
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
+<<<<<<<<< Temporary merge branch 1
+        registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090").allowedMethods("POST", "GET")
+                .allowedHeaders("*").exposedHeaders("*").allowCredentials(true).maxAge(3600);
+=========
         registry
             .addMapping("/v1/*")
             .allowedOrigins("http://localhost:8090")
@@ -84,6 +89,7 @@ public class Application
             .exposedHeaders("*")
             .allowCredentials(true)
             .maxAge(3600);
+>>>>>>>>> Temporary merge branch 2
       }
     };
   }
@@ -115,14 +121,6 @@ public class Application
       for (String beanName : beanNames) {
         System.out.println(beanName);
       }
-      MyConfig bean = ctx.getBean(MyConfig.class);
-      Human human = bean.human();
-      Human human1 = bean.human();
-      System.out.println((human == human1));
-      log.error(human.toString());
-      Human fhh = ctx.getBean("fhh", Human.class);
-      Pet tom = ctx.getBean("tom", Pet.class);
-      System.out.println((fhh.getPet() == tom));
     };
   }
 
