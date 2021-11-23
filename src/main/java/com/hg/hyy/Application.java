@@ -1,5 +1,8 @@
 package com.hg.hyy;
 
+import com.hg.hyy.config.MyConfig;
+import com.hg.hyy.entity.Human;
+import com.hg.hyy.entity.Pet;
 import com.hg.hyy.entity.Quote;
 import com.hg.hyy.interfaces.StorageService;
 import com.hg.hyy.properties.StorageProperties;
@@ -26,7 +29,8 @@ import java.util.Arrays;
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 @MapperScan("com.hg.hyy.mapper")
-public class Application extends SpringBootServletInitializer { // SpringBootServletInitializer:构建WAR文件并部署，
+public class Application
+    extends SpringBootServletInitializer { // SpringBootServletInitializer:构建WAR文件并部署，
 
   private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -75,9 +79,14 @@ public class Application extends SpringBootServletInitializer { // SpringBootSer
       @Override
       public void addCorsMappings(CorsRegistry registry) {
 
-        registry.addMapping("/v1/*").allowedOrigins("http://localhost:8090").allowedMethods("POST", "GET")
-            .allowedHeaders("*").exposedHeaders("*").allowCredentials(true).maxAge(3600);
-
+        registry
+            .addMapping("/v1/*")
+            .allowedOrigins("http://localhost:8090")
+            .allowedMethods("POST", "GET")
+            .allowedHeaders("*")
+            .exposedHeaders("*")
+            .allowCredentials(true)
+            .maxAge(3600);
       }
     };
   }
@@ -90,7 +99,8 @@ public class Application extends SpringBootServletInitializer { // SpringBootSer
   @Bean
   public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
     return args -> {
-      Quote quote = restTemplate.getForObject("https://quoters.apps.pcfone.io/api/random", Quote.class);
+      Quote quote =
+          restTemplate.getForObject("https://quoters.apps.pcfone.io/api/random", Quote.class);
       assert quote != null;
       log.error("应用启动获取资源成功：" + quote.getValue().getQuote());
     };
@@ -108,6 +118,14 @@ public class Application extends SpringBootServletInitializer { // SpringBootSer
       for (String beanName : beanNames) {
         System.out.println(beanName);
       }
+      MyConfig bean = ctx.getBean(MyConfig.class);
+      Human h1 = bean.human();
+      Human h2 = bean.human();
+      System.out.println(h1 == h2);
+      Human fhh = ctx.getBean("fhh", Human.class);
+      log.error(fhh.toString());
+      Pet tom = ctx.getBean("tom", Pet.class);
+      System.out.println(fhh.getPet() == tom);
     };
   }
 
