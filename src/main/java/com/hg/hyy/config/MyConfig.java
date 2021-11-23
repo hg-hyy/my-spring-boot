@@ -11,7 +11,7 @@ public class MyConfig {
 
   @Bean("fhh")
   public Human human() {
-    Human fhh = new Human("fhh", 35);
+    Human fhh = new Human("fhh", 36);
     fhh.setPet(pet());
     return fhh;
   }
