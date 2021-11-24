@@ -1,8 +1,5 @@
 package com.hg.hyy;
 
-import com.hg.hyy.config.MyConfig;
-import com.hg.hyy.entity.Human;
-import com.hg.hyy.entity.Pet;
 import com.hg.hyy.entity.Quote;
 import com.hg.hyy.interfaces.StorageService;
 import com.hg.hyy.properties.StorageProperties;
@@ -16,15 +13,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
@@ -74,24 +67,6 @@ public class Application
   }
 
   @Bean
-  public WebMvcConfigurer corsConfigurer() {
-    return new WebMvcConfigurer() {
-      @Override
-      public void addCorsMappings(CorsRegistry registry) {
-
-        registry
-            .addMapping("/v1/*")
-            .allowedOrigins("http://localhost:8090")
-            .allowedMethods("POST", "GET")
-            .allowedHeaders("*")
-            .exposedHeaders("*")
-            .allowCredentials(true)
-            .maxAge(3600);
-      }
-    };
-  }
-
-  @Bean
   public RestTemplate restTemplate(RestTemplateBuilder builder) {
     return builder.build();
   }
@@ -109,25 +84,17 @@ public class Application
   /*
    * 打印所有spring bean
    */
-  @Bean
-  public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-    return args -> {
-      log.error("Let's inspect the beans provided by Spring Boot:");
-      String[] beanNames = ctx.getBeanDefinitionNames();
-      Arrays.sort(beanNames);
-      for (String beanName : beanNames) {
-        System.out.println(beanName);
-      }
-      MyConfig bean = ctx.getBean(MyConfig.class);
-      Human h1 = bean.human();
-      Human h2 = bean.human();
-      System.out.println(h1 == h2);
-      Human fhh = ctx.getBean("fhh", Human.class);
-      log.error(fhh.toString());
-      Pet tom = ctx.getBean("tom", Pet.class);
-      System.out.println(fhh.getPet() == tom);
-    };
-  }
+  //  @Bean
+  //  public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+  //    return args -> {
+  //      log.error("Let's inspect the beans provided by Spring Boot:");
+  //      String[] beanNames = ctx.getBeanDefinitionNames();
+  //      Arrays.sort(beanNames);
+  //      for (String beanName : beanNames) {
+  //        System.out.println(beanName);
+  //      }
+  //    };
+  //  }
 
   @Bean
   CommandLineRunner init(StorageService storageService) {

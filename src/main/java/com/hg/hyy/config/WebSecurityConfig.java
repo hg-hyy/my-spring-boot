@@ -71,23 +71,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-
-        .antMatchers("/v1/hello-spring", "/v1/greeting", "/v1/greeting1", "/spring.ws", "/stomp.ws", "/annotation.ws",
-            "/*", "/file/**", "/test/**")
-        .permitAll().antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico").permitAll()
-        .antMatchers("/view/role", "/view/wss").access("hasRole('ADMIN')").antMatchers("/v2/greet")
+        .antMatchers(
+            "/v1/hello-spring",
+            "/v1/greeting",
+            "/v1/greeting1",
+            "/spring.ws",
+            "/stomp.ws",
+            "/annotation.ws",
+            "/*",
+            "/file/**",
+            "/test/**")
+        .permitAll()
+        .antMatchers("/css/**", "/js/**", "/pic/**", "/favicon.ico")
+        .permitAll()
+        .antMatchers("/view/role", "/view/wss")
+        .access("hasRole('ADMIN')")
+        .antMatchers("/v2/greet")
         .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
         // .and().rememberMe().tokenRepository( persistentTokenRepository() )
-        .anyRequest().access("@myAccessImpl.hasPermit(request,authentication)")
+        .anyRequest()
+        .access("@myAccessImpl.hasPermit(httpServletRequest,authentication)")
         // .anyRequest().authenticated()
-        .and().formLogin().loginPage("/login") // 登录页面
+        .and()
+        .formLogin()
+        .loginPage("/login") // 登录页面
         .loginProcessingUrl("/login") // 登录处理逻辑
         .defaultSuccessUrl("/view/role") // 默认登陆成功跳转
         .successForwardUrl("/view/role") // 登陆成功跳转
         .successHandler(new MySuccessHandler("/view/role")) // 自定义登陆成功处理
         .failureForwardUrl("/error") // 登录失败页面
         .failureHandler(new MyFailureHandler()) // 自定义登陆失败处理
-        .permitAll().and().logout().permitAll();
+        .permitAll()
+        .and()
+        .logout()
+        .permitAll();
     // 关闭csrf
 
     // http.csrf().disable();
@@ -100,7 +117,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 设置 Token 有效期为 200s，默认时长为 2 星期
         .tokenValiditySeconds(200)
         // 指定 UserDetailsService 对象
-        .userDetailsService(sysUserDetailService).tokenRepository(jdbcTokenRepository);
+        .userDetailsService(sysUserDetailService)
+        .tokenRepository(jdbcTokenRepository);
 
     // 统一的403页面
     http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
@@ -114,7 +132,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/index.html", "/static/**", "/favicon.ico")
+    web.ignoring()
+        .antMatchers("/index.html", "/static/**", "/favicon.ico")
         // 给 swagger 放行；不需要权限能访问的资源
         .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**");
   }
@@ -126,6 +145,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   // 重写密码加密校验方式:字符串存储
+  @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
     return new BCryptPasswordEncoder() {
       @Override

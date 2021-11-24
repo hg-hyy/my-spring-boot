@@ -16,13 +16,12 @@ import java.util.Collection;
 public class MyAccessImpl implements MyAccess {
 
     @Override
-    public boolean hasPermit(HttpServletRequest request, Authentication authentication) {
+    public boolean hasPermit(HttpServletRequest httpServletRequest, Authentication authentication) {
         Object principal = authentication.getPrincipal();
         if (principal instanceof SysUserDetailService sysUserDetailService) {
             Collection<? extends GrantedAuthority> authorities = sysUserDetailService.getAuthorities();
-            System.out.println(request.getRequestURI());
-            log.error("=========================");
-            return authorities.contains(new SimpleGrantedAuthority(request.getRequestURI()));
+            log.error(httpServletRequest.getRequestURI());
+            return authorities.contains(new SimpleGrantedAuthority(httpServletRequest.getRequestURI()));
         }
         return false;
     }

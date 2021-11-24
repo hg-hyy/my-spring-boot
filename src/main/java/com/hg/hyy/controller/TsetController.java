@@ -1,5 +1,6 @@
 package com.hg.hyy.controller;
 
+import com.hg.hyy.entity.Msg;
 import com.hg.hyy.entity.Sb;
 import com.hg.hyy.pojo.Receiver;
 import com.hg.hyy.service.MyTestInterfaceService;
@@ -69,10 +70,20 @@ public class TsetController {
     this.myTestInterface = myTestInterface;
   }
 
+  private Msg msg;
+
+  @Autowired
+  public void setMsg(Msg msg) {
+    this.msg = msg;
+  }
+
   @ApiOperation("测试自动装配")
   @GetMapping("/auto")
-  public String testAutoWire() {
+  public Msg testAutoWire() {
     myTestInterface.autowired();
-    return "测试自动装配";
+    msg.setMsg("测试自动装配");
+    msg.setCode(1000);
+    msg.setData("测试自动装配成功");
+    return msg;
   }
 }
