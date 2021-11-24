@@ -2,6 +2,7 @@ package com.hg.hyy.controller;
 
 import com.hg.hyy.entity.Sb;
 import com.hg.hyy.pojo.Receiver;
+import com.hg.hyy.service.MyTestInterfaceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -59,5 +60,19 @@ public class TsetController {
       template.convertAndSend("chat", "Hello from Redis!");
       Thread.sleep(500L);
     }
+  }
+
+  private MyTestInterfaceService myTestInterface;
+
+  @Autowired
+  public void setMyTestInterface(MyTestInterfaceService myTestInterface) {
+    this.myTestInterface = myTestInterface;
+  }
+
+  @ApiOperation("测试自动装配")
+  @GetMapping("/auto")
+  public String testAutoWire() {
+    myTestInterface.autowired();
+    return "测试自动装配";
   }
 }
